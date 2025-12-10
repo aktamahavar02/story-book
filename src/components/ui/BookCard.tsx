@@ -180,7 +180,7 @@ const BookCard: React.FC<BookCardProps> = ({
                 : isOrder
                 ? "w-36  sm:w-[160px]"
                 : "w-32  sm:w-[121px]"
-            }   sm:mx-0  lg:left-0   bottom-0 bg-gradient-to-r from-purple-500 to-pink-500  hover:bg-purple-700 font-figTree text-white ${
+            }   sm:mx-0  lg:left-0   bottom-0 bg-[#61C8A4] hover:bg-[#61C8A4]/80 font-figTree text-white ${
               isCart
                 ? " [@media(min-width:1px)_and_(max-width:425px)]:text-[10px]  sm:text-sm"
                 : " text-sm"

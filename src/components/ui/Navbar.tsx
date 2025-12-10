@@ -334,7 +334,7 @@ const Navbar: React.FC = () => {
               Books
             </a>
 
-            <a
+            {/* <a
               href="/my-books"
               onClick={(e) => {
                 e.preventDefault();
@@ -357,21 +357,19 @@ const Navbar: React.FC = () => {
                   {myBook?.totalResults}
                 </span>
               )}
-            </a>
+            </a> */}
 
             <a
+           
+
               href="/support"
               onClick={(e) => {
                 e.preventDefault();
-                const token = cookie.get("token");
-                if (!token) {
-                  localStorage.setItem("from", "/support");
-                  navigate("/login");
-                } else {
-                  navigate("/support");
-                }
+                navigate("/support");
               }}
-              className={`${isActive("/support")} font-medium cursor-pointer`}
+              className={`${isActive(
+                "/support"
+              )} font-medium cursor-pointer`}
             >
               Support
             </a>

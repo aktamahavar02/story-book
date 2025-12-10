@@ -114,7 +114,110 @@ const HomePage = () => {
   const reviewDataList = useSelector(
     (state) => state?.bookTemplate?.reviewData
   );
-  const reviewList = reviewDataList?.data?.results;
+
+  const reviewData = 
+  {
+    "results": [
+        {
+            "createdAt": "2025-11-20T05:02:03.000Z",
+            "title": "Best",
+            "rating": 5,
+            "comment": "Best",
+            "personalizedBookId": "691c3af9d8ce6d001318d1e8",
+            "updatedBy": "68d10d752e4b2c31b6275766",
+            "bookTemplateId": "68ad3607fc29be1873fc36b0",
+            "id": "691ea0cb2a6d7f00139a7096",
+            "name": "Akash Limbani"
+        },
+        {
+            "createdAt": "2025-09-05T11:40:53.188Z",
+            "title": "Courage Shines Bright",
+            "rating": 5,
+            "comment": "A perfect mix of kindness, courage, and magic—my child couldn’t stop smiling!",
+            "personalizedBookId": "68bacbf66d36fdb01dd4b4ea",
+            "updatedBy": "68ba7ac7c51c005809932051",
+            "bookTemplateId": "68ad3607fc29be1873fc36b6",
+            "id": "68bacc456d36fdb01dd4b561",
+            "name": "Digen"
+        },
+        {
+            "createdAt": "2025-09-05T11:39:55.481Z",
+            "title": "A Worthy Sequel",
+            "rating": 5,
+            "comment": "Even more magical than the first! My daughter adored seeing the Princess grow braver.",
+            "personalizedBookId": "68bacbf66d36fdb01dd4b4ea",
+            "updatedBy": "68ba7af1c51c00580993205d",
+            "bookTemplateId": "68ad3607fc29be1873fc36b6",
+            "id": "68bacc0b6d36fdb01dd4b535",
+            "name": "Sarthik"
+        },
+        {
+            "createdAt": "2025-09-05T11:38:08.195Z",
+            "title": "Lessons for Life",
+            "rating": 5,
+            "comment": "Perfect bedtime read—teaches virtues in a gentle, magical way children truly enjoy.",
+            "personalizedBookId": "68bacb106d36fdb01dd4b403",
+            "updatedBy": "68ba7af1c51c00580993205d",
+            "bookTemplateId": "68ad3607fc29be1873fc36da",
+            "id": "68bacba06d36fdb01dd4b491",
+            "name": "Sarthik"
+        },
+        {
+            "createdAt": "2025-09-05T11:37:15.598Z",
+            "title": "A Magical Guide",
+            "rating": 5,
+            "comment": "The Wise Owl is now my daughter’s favorite—such a fun way to teach important values!",
+            "personalizedBookId": "68bacb106d36fdb01dd4b403",
+            "updatedBy": "68ba7ac7c51c005809932051",
+            "bookTemplateId": "68ad3607fc29be1873fc36da",
+            "id": "68bacb6b6d36fdb01dd4b47a",
+            "name": "Digen"
+        },
+        {
+            "createdAt": "2025-09-05T11:36:14.184Z",
+            "title": "Wisdom With Heart",
+            "rating": 5,
+            "comment": "A beautiful story—my child loved learning about honesty, patience, and kindness.",
+            "personalizedBookId": "68bacb106d36fdb01dd4b403",
+            "updatedBy": "68ba79740bd49d39c907c074",
+            "bookTemplateId": "68ad3607fc29be1873fc36da",
+            "id": "68bacb2e6d36fdb01dd4b451",
+            "name": "Hardik"
+        },
+        {
+            "createdAt": "2025-09-05T11:35:21.608Z",
+            "title": "Learning With Smiles",
+            "rating": 5,
+            "comment": "A delightful way for kids to discover themselves—personalization makes it extra special.",
+            "personalizedBookId": "68baca6d6d36fdb01dd4b372",
+            "updatedBy": "68ba79740bd49d39c907c074",
+            "bookTemplateId": "68ad3607fc29be1873fc36c8",
+            "id": "68bacaf96d36fdb01dd4b400",
+            "name": "Hardik"
+        },
+        {
+            "createdAt": "2025-09-05T11:34:32.025Z",
+            "title": "Perfect for Toddlers",
+            "rating": 5,
+            "comment": "Interactive and joyful—my child now proudly points to toes, nose, and tummy!",
+            "personalizedBookId": "68baca6d6d36fdb01dd4b372",
+            "updatedBy": "68ba793a0bd49d39c907c068",
+            "bookTemplateId": "68ad3607fc29be1873fc36c8",
+            "id": "68bacac86d36fdb01dd4b3e9",
+            "name": "Vivek"
+        }
+    ],
+    "totalResults": 67,
+    "limit": 8,
+    "totalPages": 9,
+    "page": 1,
+    "pagingCounter": 1,
+    "hasPrevPage": false,
+    "hasNextPage": true,
+    "prevPage": null,
+    "nextPage": 2
+}
+  const reviewList = reviewData?.data?.results;
   const boyBooks = (littleData || [])
     .filter((card) => card?.idealFor === "boy")
     .slice(0, 4);
@@ -524,38 +627,33 @@ const HomePage = () => {
       </div>
       <div className={` ${isNavbarOpen ? "blur-sm" : ""}  `}>
         {/* Hero Section */}
-        <section className="bg-gradient-to-br from-pink-200 via-purple-50 to-blue-200 relative overflow-hidden">
-          <div className="max-w-8xl mx-auto px-6 py-[28px] lg:py-4">
+        <section className="bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 py-20">
+          <div className="max-w-6xl mx-auto px-6">
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="relative">
-                <div className="relative z-10">
-                  <img
-                    src={frontPicture}
-                    alt="Storybook"
-                     loading="lazy"
-                    className="w-full max-w-xl mx-auto rounded-2xl shadow-2xl"
-                  />
-                </div>
-              </div>
-              <div className="lg:px-0 px-[12px]">
-                {/* <div className="text-sm text-purple-600 font-medium uppercase font-figTree tracking-widest"> */}
-                <h3 className="text-sm lg:leading-10 font-semibold font-figTree md:tracking-[3px] md:leading-10 uppercase">
-                  BRING YOUR UNIQUE STORYBOOK TO LIFE!
-                </h3>
-                <h1 className="text-4xl lg:text-craft-text text-gray-900 leading-tight font-marcellus mt-0">
-                  Craft magical tales where{" "}
-                  <span className="inline-block overflow-hidden whitespace-nowrap animate-smoothTyping">
-                    <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
-                      you're the hero
-                    </span>
+              <div className="text-center md:text-left">
+                <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 font-marcellus">
+                  Create Magical
+                  <span className="block bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
+                    Storybooks
                   </span>
                 </h1>
+                <p className="text-xl text-gray-600 mb-8 font-figTree">
+                  Where your child becomes the hero of their own adventure
+                </p>
                 <Button
                   onClick={handleGetStarted}
-                  className="bg-white hover:bg-white text-purple-500 py-[14px] text-sm font-medium px-[26px] font-figTree h-[48px] rounded-[4px] lg:!mt-[40px] !mt-[20px]"
+                  className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white px-8 py-4 text-lg rounded-full shadow-lg transform hover:scale-105 transition-all"
                 >
-                  View All Books
+                  Start Creating
                 </Button>
+              </div>
+              <div className="relative">
+                <img
+                  src={frontPicture}
+                  alt="Magical Storybook"
+                  loading="lazy"
+                  className="w-full max-w-lg mx-auto rounded-3xl shadow-2xl transform hover:scale-105 transition-transform duration-300"
+                />
               </div>
             </div>
           </div>

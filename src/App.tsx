@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useScrollToTop } from "./hooks/useScrollToTop";
-import HomePage from "./pages/HomePage";
+// import HomePage from "./pages/HomePage";
 import BookDetailPage from "./pages/BookDetailPage";
 import MyBooksPage from "./pages/MyBooksPage";
 import SetupPage from "./pages/SetupPage";
@@ -57,6 +57,9 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminPrivateRoute from "../src/pages/AdminPrivateRoute";
 import axios from "axios";
 import OrderDetailsPage from "./pages/OrderDetailsPage.js";
+import HomePage from "./pages/HomePageSimple.js";
+import BookDetailPageStatic from "./pages/BookDetailPageStatic.js";
+import TemplateSelectionPageStatic from "./pages/TemplateSelectionPageStatic.js";
 
 const queryClient = new QueryClient();
 
@@ -133,8 +136,8 @@ const AppContent: React.FC = () => {
     <div>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/template-selection" element={<TemplateSelectionPage />} />
-        <Route path="/book/space-explorer/:id?" element={<BookDetailPage />} />
+        <Route path="/template-selection" element={<TemplateSelectionPageStatic />} />
+        <Route path="/book-detail/:id?" element={<BookDetailPageStatic />} />
         <Route path="/blog/:id" element={<BlogsDetails />} />
         <Route path="/blog/" element={<BlogList />} />
         <Route path="/faqs" element={<Faqs />} />
@@ -144,6 +147,11 @@ const AppContent: React.FC = () => {
         <Route path="/BookChildInfo" element={<BookChildInfo />} />
         <Route path="/terms-conditions" element={<TermsAndConditions />} />
         <Route path="/setup/:id?" element={<SetupPage />} />{" "}
+
+        <Route
+          path="/support"
+          element={<SupportPage />}
+        />
         <Route
           path="/book/:bookId"
           element={<PrivateRoute Component={BookDetailPage} />}
@@ -288,10 +296,7 @@ const AppContent: React.FC = () => {
           />
         </Route>
         {/* <Route path="disease-list" element={<PrivateRoute Component={DiseaseSelect} />} /> */}
-        <Route
-          path="/support"
-          element={<PrivateRoute Component={SupportPage} />}
-        />
+    
         <Route
           path="/choose-flow"
           element={<PrivateRoute Component={ChooseFlowPage} />}
