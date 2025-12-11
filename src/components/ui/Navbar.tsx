@@ -1,51 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { CloudHail, Menu, X } from "lucide-react";
-import { cookie } from "../../utils/cookies.js";
-import { useDispatch, useSelector } from "react-redux";
+import { cookie } from "../../utils/cookies";
 import logo from "../../assets/svgs/logo.svg";
-import CartList from "./CardList.js";
-import {
-  personalizedBookCart,
-  myBooksGet,
-} from "../../../store/slices/bookTemplateSlice.js";
-import { useFormik } from "formik";
-import {
-  countryList,
-  currencyList,
-  countryUpdate,
-} from "../../../store/slices/loginSlice.js";
-import TailwindDrawer from "../modals/HamburgerDrawer.js";
-import axios from "axios";
-import { setIsNavbarOpen } from "../../../store/slices/bookTemplateSlice.js";
+import TailwindDrawer from "../modals/HamburgerDrawer";
+import { staticUser } from "../../utils/staticData";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
   const [open, setOpen] = useState(false);
-  const profileData = useSelector((state: any) => state?.auth?.profile);
-
-  const dispatch = useDispatch();
-  const [countryData, setCountryData] = useState(null);
-
-  useEffect(() => {
-    const fetchCountry = async () => {
-      try {
-        const response = await axios.get("https://ipapi.co/json/");
-        setCountryData(response.data);
-      } catch (error) {
-        console.error("Error fetching country info:", error);
-      }
-    };
-
-    fetchCountry();
-  }, []);
-
-  useEffect(() => {
-    dispatch(setIsNavbarOpen(isMobileMenuOpen));
-  }, [isMobileMenuOpen]);
+  const token = cookie.get("token");
+  const user = token ? staticUser : null;
 
   const isActive = (path: string) =>
     location.pathname === path
@@ -57,199 +24,21 @@ const Navbar: React.FC = () => {
       ? "text-purple-600 bg-purple-200 "
       : "text-gray-600 hover:text-gray-900 bg-gray-100";
   const handleLogout = () => {
-    cookie.remove("token"); // ✅ remove the token
-    window.location.href = "/login"; // ✅ redirect to login
+    cookie.remove("token");
+    localStorage.removeItem("user");
+    navigate("/login", { replace: true });
   };
 
-  const cartList = useSelector((state) => state?.bookTemplate?.cartData);
-  const items = cartList?.data?.personalizedBooks;
-  const totalCart = cartList?.data;
-  const token = cookie.get("token");
-  const countryListData = useSelector((state) => state?.auth?.countryList);
-  const isCountryLoading = useSelector(
-    (state) => state?.auth?.isCountryLoading
-  );
-  const currencyListData = useSelector((state) => state?.auth?.currencyList);
+  // Static data - no Redux needed
+  const myBooksCount = 0; // Static count
 
-  const currencyData = useSelector((state) => state?.bookTemplate?.currency);
-  const countryGet = useSelector((state) => state?.bookTemplate?.country);
-
-  useEffect(() => {
-    dispatch(countryList());
-    dispatch(currencyList());
-  }, []);
-
-  useEffect(() => {
-    const token = cookie.get("token");
-    if (token) {
-      dispatch(myBooksGet({}));
-    }
-  }, []);
-
-  useEffect(() => {
-    const token = cookie.get("token");
-
-    if (token && currencyData?.currencyCode) {
-      dispatch(
-        personalizedBookCart({ currencyCode: currencyData?.currencyCode })
-      );
-    }
-  }, [currencyData?.currencyCode]);
-  const myBook = useSelector((state) => state?.bookTemplate?.myBooksData);
-
-  const dropdownRef = useRef(null);
-
-
-
-  
-  const formik = useFormik({
-    // initialValues: {
-    //   country: "Austria",
-    //   currency: "Euro",
-    // },
-
-    enableReinitialize: true,
-    initialValues: {
-      country: countryGet?.countryName ,
-      currency: currencyData?.currencyName,
-    },
-    onSubmit: (values) => {
-   
-      const selectedCountryObject = countryListData?.find(
-        (item) => item?.countryName === values?.country
-      );
-
-      const selectedCurrencyObject = currencyListData?.find(
-        (item) => item?.currencyName === values?.currency
-      );
-
-      localStorage.setItem("country", values?.country);
-      localStorage.setItem("currency", values?.currency);
-      localStorage.setItem("countrySave", selectedCountryObject?.countryCode);
-      localStorage.setItem(
-        "currencySave",
-        selectedCurrencyObject?.currencyCode
-      );
-      window.location.reload();
-      setOpenModal(false);
-      const payload = {
-        shipTo: selectedCountryObject?.countryCode,
-        currency: selectedCurrencyObject?.currencyCode,
-      };
-      const token = cookie.get("token");
-      if (token) {
-        dispatch(
-          countryUpdate({
-            ...payload,
-            onSuccess: () => {
-              window.location.reload();
-            },
-          })
-        );
-      }
-    },
-  });
-  const buttonRef = useRef(null);
-  // useEffect(() => {
-  //   const handleClickOutside = (e) => {
-  //     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-  //       setOpenModal(false);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => document.removeEventListener("mousedown", handleClickOutside);
-  // }, []);
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target) &&
-        !buttonRef.current.contains(e.target)
-      ) {
-        setOpenModal(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-  const isNavbarOpen = useSelector(
-    (state) => state?.bookTemplate?.isNavbarOpen
-  );
+  // Simplified navbar - no complex preferences needed
 
   {
     /* <div className={` ${isNavbarOpen ? "blur-sm": ''}  `}></div> */
   }
   return (
     <div className="relative">
-      {openModal && (
-        <>
-          <div
-            ref={dropdownRef}
-            className="absolute z-[999999] top-[60px] right-[190px] 2xl:right-[400px] mt-2 w-72 bg-white shadow-lg rounded-xl px-[24px] py-[16px]
-                 [@media(min-width:1px)_and_(max-width:320px)]:right-[20px] [@media(min-width:321px)_and_(max-width:500px)]:right-[40px] [@media(min-width:1950px)_and_(max-width:2560px)]:right-[750px]
-                 "
-          >
-            <h3 className="text-lg font-semibold mb-4 font-figTree">
-              Preferences
-            </h3>
-            <form onSubmit={formik.handleSubmit}>
-              {/* Ship To */}
-              <label className="block text-sm font-medium mb-1 font-figTree text-[#374151]">
-                Ship To
-              </label>
-
-              <select
-                name="country"
-                value={formik.values.country}
-                onChange={formik.handleChange}
-                className="w-full placeholder:text-xs md:placeholder:text-sm font-figTree rounded-lg text-sm h-10 text-black placeholder-gray-500/50 border border-gray-300 focus:outline-none focus:ring-0 focus:border-purple-500 leading-none py-[8px] pr-[40px] pl-[12px]"
-              >
-                <option value="">Select Country</option>
-                {countryListData?.map((item, ind) => {
-                  return (
-                    <option value={item?.countryName} id={ind}>
-                      {item?.countryName}
-                    </option>
-                  );
-                })}
-              </select>
-
-              {/* Currency */}
-              <label className="block text-sm font-medium mb-1 mt-[10px] font-figTree text-[#374151]">
-                Currency
-              </label>
-
-              <select
-                name="currency"
-                value={formik.values.currency}
-                onChange={formik.handleChange}
-                className="w-full placeholder:text-xs text-black font-figTree md:placeholder:text-sm rounded-lg text-sm h-10 placeholder-gray-500/50 border border-gray-300 focus:outline-none focus:ring-0 focus:border-purple-500 leading-none py-[8px] pr-[40px] pl-[12px]"
-              >
-                <option value="EUR">Select Currency</option>
-                {Array.from(
-                  new Map(
-                    currencyListData?.map((item) => [
-                      item.currencyName,
-                      item.currencyCode,
-                    ])
-                  ).entries()
-                ).map(([currencyName, currencyCode], ind) => (
-                  <option value={currencyName} key={ind}>
-                    {currencyName} ({currencyCode})
-                  </option>
-                ))}
-              </select>
-
-              <button
-                type="submit"
-                className="w-full text-sm font-figTree bg-gradient-to-r from-purple-600 to-pink-500 text-white py-2 rounded-lg h-[40px] mt-[20px]"
-              >
-                Save
-              </button>
-            </form>
-          </div>
-        </>
-      )}
       <nav
         className="bg-white  border-b border-gray-100 px-4 py-4 sticky top-0 z-50 shadow border"
         onClick={() => setOpen(false)}
@@ -334,7 +123,7 @@ const Navbar: React.FC = () => {
               Books
             </a>
 
-            {/* <a
+            <a
               href="/my-books"
               onClick={(e) => {
                 e.preventDefault();
@@ -352,15 +141,15 @@ const Navbar: React.FC = () => {
               }
             >
               My Books
-              {myBook?.totalResults > 0 && (
+              {myBooksCount > 0 && (
                 <span className="absolute -top-1 -right-3.5 -mt-1 -mr-1 rounded-full bg-gray-200 text-[#1F2937] text-xs w-5 h-5 flex items-center justify-center">
-                  {myBook?.totalResults}
+                  {myBooksCount}
                 </span>
               )}
-            </a> */}
+            </a>
 
             <a
-           
+
 
               href="/support"
               onClick={(e) => {
@@ -374,10 +163,10 @@ const Navbar: React.FC = () => {
               Support
             </a>
           </div>
-          <div className={` ${isNavbarOpen ? "blur-sm" : ""}  `}>
+          <div>
             <div className="flex items-center gap-3">
-           
-           
+
+
 
               <div className="relative inline-block text-left  ">
                 <button
@@ -393,11 +182,7 @@ const Navbar: React.FC = () => {
                     }
                   }}
                 >
-                  <div
-                    className={`flex items-center gap-[4px]  pt-1 ${
-                      totalCart?.personalizedBooks?.length > 0 ? "pl-2" : ""
-                    }`}
-                  >
+                  <div className="flex items-center gap-[4px] pt-1">
                     {/* <LuUserRound className="w-5 h-5" /> */}
                     <svg
                       className="size-5"
@@ -411,7 +196,7 @@ const Navbar: React.FC = () => {
                       ></path>
                     </svg>
                     <span className="font-figTree font-normal text-base text-[#374151] [@media(min-width:1px)_and_(max-width:425px)]:hidden">
-                      {profileData?.name}
+                      {user?.name || "Account"}
                     </span>
                   </div>
                 </button>
@@ -532,18 +317,14 @@ const Navbar: React.FC = () => {
 
               <button
                 onClick={() => {
-                  const token = cookie.get("token");
-                  if (!token) {
-                    localStorage.setItem("from", "/support");
-                    navigate("/login");
-                  } else {
-                    navigate("/support");
-                    setIsMobileMenuOpen(false);
-                  }
+
+
+                  navigate("/support");
+                  setIsMobileMenuOpen(false);
                 }}
                 className={`w-full ps-3 pe-4 py-2.5 px-3   ${isActiveMobile(
                   "/support"
-                )}    mb-2 font-figTree  text-start text-base font-normal text-gray-900 bg-gray-100 rounded-md  focus:outline-none focus:text-gray-400  transition duration-150 ease-in-out`}
+                )}    mb-2 font-figTree text-start text-base font-normal text-gray-900 bg-gray-100 rounded-md  focus:outline-none focus:text-gray-400   transition duration-150 ease-in-out`}
               >
                 Support
               </button>

@@ -229,7 +229,7 @@ const TemplateSelectionPageStatic = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const AgeFilter = location?.state?.age;
-  
+
   useEffect(() => {
     if (AgeFilter) {
       setSelectedAgeRange([AgeFilter]);
@@ -242,7 +242,7 @@ const TemplateSelectionPageStatic = () => {
 
     // Filter by gender
     if (selectedGender && selectedGender.length > 0) {
-      filtered = filtered.filter(book => 
+      filtered = filtered.filter(book =>
         selectedGender.includes(book.idealFor) || book.idealFor === "boy/girl"
       );
     }
@@ -255,14 +255,14 @@ const TemplateSelectionPageStatic = () => {
             if (val === "8+") return [8, 100];
             return parseInt(val, 10);
           });
-          
+
           const bookMin = book.ageRange?.minAge || 0;
           const bookMax = book.ageRange?.maxAge || 100;
-          
+
           if (range === "8+") {
             return bookMin >= 8;
           }
-          
+
           return (bookMin <= max && bookMax >= min);
         });
       });
@@ -315,6 +315,39 @@ const TemplateSelectionPageStatic = () => {
   const hasNextPage = currentPage < totalPages;
   const hasPrevPage = currentPage > 1;
 
+  const ageCardData = [
+    {
+      id: "1",
+      imageUrl: dummy,
+      ageLabel: "0-2",
+    },
+    {
+      id: "2",
+      imageUrl: age1,
+      ageLabel: "2-4",
+    },
+    {
+      id: "3",
+      imageUrl: age3,
+      ageLabel: "4-6",
+    },
+    {
+      id: "4",
+      imageUrl: age2,
+      ageLabel: "6-8",
+    },
+  ];
+
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const yOffset = -100; // scroll 200px *above* the element
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
   return (
     <>
       <div className="sticky top-0 z-40">
@@ -325,45 +358,43 @@ const TemplateSelectionPageStatic = () => {
         />
         <Navbar />
       </div>
-      
+
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
         <div className="max-w-max mx-auto px-0 sm:px-6">
           <div className="flex flex-col space-y-0 gap-4 pt-4 md:mt-0 px-4 md:px-0">
-            
+
             <div className="" id="filtersSection">
               <PersonalisedBookCard
                 title="Hyper-personalised Books"
                 description="A Story for Everyone, Tailored Just Right"
               />
-              
+
               <div className="flex items-start sm:items-center gap-2 sm:gap-8 lg:gap-8 py-3 px-1 sm:px-4 text-gray-600 [@media(min-width:1px)_and_(max-width:424px)]:flex-wrap">
-                
+
                 {/* Gender Filter */}
                 <div className="gender-filter flex items-center gap-2 flex-wrap">
                   <img src={genderIcon} alt="gender" className="w-5" loading="lazy" />
                   <div className="font-figTree text-sm text-gray-600">Gender</div>
                   <div className="flex gap-1">
                     <button
-                      className={`p-2 font-figTree cursor-pointer border rounded-md px-3 lg:px-4 py-2 text-sm ${
-                        selectedGender?.includes("boy") ? activeButtonStyle : defaultButtonStyle
-                      }`}
+                      className={`p-2 font-figTree cursor-pointer border rounded-md px-3 lg:px-4 py-2 text-sm ${selectedGender?.includes("boy") ? activeButtonStyle : defaultButtonStyle
+                        }`}
                       onClick={() => handleGenderChange("boy")}
                     >
                       Boy
                     </button>
                     <button
-                      className={`p-2 font-figTree cursor-pointer border rounded-md px-3 lg:px-4 py-2 text-sm ${
-                        selectedGender?.includes("girl") ? activeButtonStyle : defaultButtonStyle
-                      }`}
+                      className={`p-2 font-figTree cursor-pointer border rounded-md px-3 lg:px-4 py-2 text-sm ${selectedGender?.includes("girl") ? activeButtonStyle : defaultButtonStyle
+                        }`}
                       onClick={() => handleGenderChange("girl")}
                     >
                       Girl
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="hidden lg:block h-8 border-l border-gray-300"></div>
-                
+
                 {/* Age Filter */}
                 <div className="age-filter flex items-center flex-wrap gap-2">
                   <svg className="w-5 h-5 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
@@ -374,9 +405,8 @@ const TemplateSelectionPageStatic = () => {
                     {["0-2", "2-4", "4-6", "6-8", "8+"].map((range) => (
                       <button
                         key={range}
-                        className={`text-center cursor-pointer border border-gray-300 text-sm px-3 rounded-md hover:bg-purple-50 transition-colors font-figTree text-gray-600 ${
-                          selectedAgeRange?.includes(range) ? activeButtonStyle : defaultButtonStyle
-                        }`}
+                        className={`text-center cursor-pointer border border-gray-300 text-sm px-3 rounded-md hover:bg-purple-50 transition-colors font-figTree text-gray-600 ${selectedAgeRange?.includes(range) ? activeButtonStyle : defaultButtonStyle
+                          }`}
                         onClick={() => handleAgeChange(range)}
                       >
                         {range}
@@ -384,7 +414,7 @@ const TemplateSelectionPageStatic = () => {
                     ))}
                   </div>
                 </div>
-                
+
                 {/* Clear Filters */}
                 {(currentPage > 1 || (selectedGender && selectedGender.length > 0) || (selectedAgeRange && selectedAgeRange.length > 0)) && (
                   <>
@@ -441,11 +471,10 @@ const TemplateSelectionPageStatic = () => {
                         window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       disabled={!hasPrevPage}
-                      className={`px-3 py-1 rounded border text-sm ${
-                        !hasPrevPage
+                      className={`px-3 py-1 rounded border text-sm ${!hasPrevPage
                           ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                           : "bg-white text-gray-700 hover:bg-gray-50"
-                      }`}
+                        }`}
                     >
                       Previous
                     </button>
@@ -457,11 +486,10 @@ const TemplateSelectionPageStatic = () => {
                           setCurrentPage(page);
                           window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
-                        className={`px-3 py-1 rounded border text-sm ${
-                          currentPage === page
+                        className={`px-3 py-1 rounded border text-sm ${currentPage === page
                             ? "bg-purple-500 text-white"
                             : "bg-white text-gray-700 hover:bg-gray-50"
-                        }`}
+                          }`}
                       >
                         {page}
                       </button>
@@ -473,11 +501,10 @@ const TemplateSelectionPageStatic = () => {
                         window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       disabled={!hasNextPage}
-                      className={`px-3 py-1 rounded border text-sm ${
-                        !hasNextPage
+                      className={`px-3 py-1 rounded border text-sm ${!hasNextPage
                           ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                           : "bg-white text-gray-700 hover:bg-gray-50"
-                      }`}
+                        }`}
                     >
                       Next
                     </button>
@@ -486,24 +513,28 @@ const TemplateSelectionPageStatic = () => {
               </div>
             )}
 
-            {/* Create From Scratch Section */}
-            <Card className="mt-12 bg-gradient-to-r from-purple-100 to-pink-100 border-none">
-              <CardContent className="p-8 text-center">
-                <Wand2 className="h-12 w-12 mx-auto mb-4 text-purple-600" />
-                <h3 className="text-2xl font-bold text-gray-900 mb-4 font-marcellus">
-                  Create Your Own Story
-                </h3>
-                <p className="text-gray-600 mb-6 max-w-2xl mx-auto font-figTree">
-                  Can't find the perfect template? Use our AI-powered story builder to create a completely unique adventure tailored for your child.
-                </p>
-                <Button
-                  onClick={handleCreateFromScratch}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 rounded-full font-figTree"
-                >
-                  Create From Scratch
-                </Button>
-              </CardContent>
-            </Card>
+            <div className="max-w-7xl mx-auto px-4 pt-0 sm:pt-12 pb-4">
+              <h2 className=" text-[24px] sm:text-3xl font-marcellus text-black  text-center ">
+                Browse Stories by Age
+              </h2>
+              <div className="my-8">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-4 lg:gap-4 sm:px-2">
+                  {ageCardData?.map((card) => (
+                    <AgeCard
+                      key={card.id}
+                      imageUrl={card.imageUrl}
+                      ageLabel={card.ageLabel}
+                      onClick={() => {
+                        setSelectedAgeRange([card.ageLabel]); // Wrap in array
+                        scrollToSection("filtersSection");
+                        setCurrentPage(1);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 

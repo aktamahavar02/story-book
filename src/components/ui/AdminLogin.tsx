@@ -1,23 +1,14 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-import { adminLogin } from "../../../store/slices/loginSlice.js";
 import { useNavigate } from "react-router-dom";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import GoogleCustomButton from "./GoogleLogin.js";
-import BasicLoader from "./basicLoader.js";
-import { cookie } from "../../../src/utils/cookies";
+import { cookie } from "../../utils/cookies";
+import { toast } from "react-hot-toast";
+import { isValidAdminCredentials, staticAdmin } from "../../utils/staticData";
 
 
 const AdminLogin: React.FC = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const VITE_GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-
-  // No redirect logic here - users can access this page regardless of token status
-  // If you want to redirect logged-in users away from login, you can add logic here
-  // For now, letting anyone access this page as normal login would
 
   const formik = useFormik({
     initialValues: {
@@ -28,7 +19,7 @@ const AdminLogin: React.FC = () => {
       email: Yup.string()
         .required("Please fill email")
         .matches(
-          /^[^\s@]+@[^\\s@]+\.[^\\s@]{2,}$/,
+          /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/,
           "Invalid email (must include .com/.net/etc)"
         ),
       password: Yup.string()
@@ -38,19 +29,21 @@ const AdminLogin: React.FC = () => {
     validateOnChange: true,
     validateOnBlur: true,
     onSubmit: (values) => {
-      const payload = {
-        ...values,
-        onSuccess: () => {
-          cookie.remove("token");
-          // On successful login, navigate to admin dashboard or specific admin page
-          // You might want to verify that this user is an admin before allowing access
-          // For now, we'll assume successful login means 
-      // valid admin access
-      
-          navigate("/admin/dashboard", { replace: true }); // Adjust this path as needed
-        },
-      };
-      dispatch(adminLogin({ ...payload }));
+      if (isValidAdminCredentials(values.email, values.password)) {
+        // Set admin token
+        cookie.set("adminToken", "static-admin-token");
+        cookie.remove("token"); // Remove user token if exists
+        
+        // Save admin data
+        localStorage.setItem("admin", JSON.stringify(staticAdmin));
+
+        toast.success("Admin Login Successful!");
+        
+        // Navigate to admin dashboard
+        navigate("/admin/dashboard", { replace: true });
+      } else {
+        toast.error("Invalid admin credentials");
+      }
     },
   });
 
@@ -77,7 +70,7 @@ const AdminLogin: React.FC = () => {
     }
   };
 
-  const loading = useSelector((state) => state?.auth?.isAdminLogin);
+  const [loading] = useState(false);
 
   return (
     <form onSubmit={handleFormSubmit} className="space-y-6">
@@ -123,7 +116,7 @@ const AdminLogin: React.FC = () => {
           type="submit"
           className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-purple-600 text-white py-2 text-sm rounded font-normal font-figTree"
         >
-          {loading ? <BasicLoader /> : "Log in as Admin"}
+          {loading ? "Loading..." : "Log in as Admin"}
         </button>
 
         <div className="flex justify-end text-sm text-purple-500  font-medium font-figTree mt-2 ">

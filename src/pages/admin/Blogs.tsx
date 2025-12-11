@@ -1,49 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  blogGet,
-  blogDelete,
-  blogStatus,
-} from "../../../store/slices/bookTemplateSlice.js";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import Pagination from "./Pagination.js";
-import loadingImage from "../../assets/images/purple.gif";
-import { profile } from "../../../store/slices/loginSlice.js";
 import { Helmet } from "react-helmet-async";
+import { staticBlogs, staticAdmin } from "../../utils/staticData";
 const Blogs = () => {
-  const dispatch = useDispatch();
-
   const [currentPage, setCurrentPage] = useState(1);
 
-  const profileData = useSelector((state: any) => state?.auth?.profile);
-  const status = useSelector((state: any) => state?.bookTemplate?.blogStatusData);
-  const admin = profileData?.role === "admin";
-
-  useEffect(() => {
-    dispatch(profile());
-  }, []);
-  useEffect(() => {
-    if (admin) {
-      dispatch(blogGet({ limit: 10, page: currentPage }));
-    }
-  }, [admin, dispatch, currentPage]);
-
-  const blogList = useSelector((state) => state?.bookTemplate?.blogGet);
-  const isLoading = useSelector((state) => state?.bookTemplate?.isBlog);
-  const blogData = blogList?.data?.results;
-
-  const totalPages = blogList?.data?.totalPages || 1;
-  const totalResults = blogList?.data?.totalResults || 1;
+  // Static data
+  const profileData = staticAdmin;
+  const admin = true;
+  const isLoading = false;
+  const blogData = staticBlogs;
+  const status = { data: { totalBlog: staticBlogs.length, publishBlog: staticBlogs.length } };
+  const totalPages = Math.ceil(staticBlogs.length / 10) || 1;
+  const totalResults = staticBlogs.length;
   const navigate = useNavigate();
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
-  useEffect(() => {
-    dispatch(blogStatus({}))
-  
-  }, [])
+
   const timeAgo = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -177,15 +154,8 @@ const Blogs = () => {
                         </button>
                         <button
                           onClick={() => {
-                            dispatch(
-                              blogDelete({
-                                id: post?.id,
-                                onSuccess: () =>
-                                  dispatch(
-                                    blogGet({ limit: 5, page: currentPage })
-                                  ),
-                              })
-                            );
+                            // Static implementation - no actual delete
+                            setOpenMenuId(null);
                           }}
                           className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm flex gap-2 items-center"
                         >

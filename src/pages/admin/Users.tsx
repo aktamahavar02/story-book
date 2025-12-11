@@ -1,28 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { adminUsers } from "../../../store/slices/loginSlice.js";
+import React, { useState } from "react";
 import Pagination from "./Pagination";
 import { Helmet } from "react-helmet-async";
-import loadingImage from "../../assets/images/purple.gif";
+import { staticUsers } from "../../utils/staticData";
 
 // Pagination component
 
 const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Number of users per page
+  const itemsPerPage = 5;
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(adminUsers({ page: currentPage }));
-  }, [currentPage]);
-
-  const adminUsersRes = useSelector((state) => state?.auth?.adminUsersRes);
-  const isUserLoading = useSelector((state) => state?.auth?.isUserLoading);
-
-  // Use API data
-  const users = adminUsersRes?.data?.results || [];
-  const totalPages = adminUsersRes?.data?.totalPages || 1;
+  // Static data
+  const isUserLoading = false;
+  const users = staticUsers;
+  const totalPages = Math.ceil(users.length / itemsPerPage) || 1;
+  const totalResults = users.length;
 
   return (
     <div className="p-6  mt-[66px]">
@@ -134,9 +125,9 @@ const Users = () => {
             </div>
             <Pagination
               currentPage={currentPage}
-              totalPages={adminUsersRes?.data?.totalPages || 1}
+              totalPages={totalPages}
               onPageChange={setCurrentPage}
-              totalResults={adminUsersRes?.data?.totalResults}
+              totalResults={totalResults}
             />
           </>
         )}

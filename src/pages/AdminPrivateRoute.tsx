@@ -1,19 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cookie } from "../utils/cookies";
 
-const AdminPrivateRoute = ({ Component, ...rest }: { Component: React.FC }) => {
+interface AdminPrivateRouteProps {
+  Component: React.ComponentType<any>;
+  [key: string]: any;
+}
+
+const AdminPrivateRoute: React.FC<AdminPrivateRouteProps> = ({ Component, ...rest }) => {
   const navigate = useNavigate();
-  const adminToken = cookie.get("adminToken");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-  React.useEffect(() => {
-    if (!adminToken) {
-      navigate("/admin/login"); // Redirect to admin login if no admin token
+  useEffect(() => {
+    const adminToken = cookie.get("adminToken");
+    
+    if (adminToken) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+      navigate("/admin/login", { replace: true });
     }
-  }, [adminToken, navigate]);
+  }, [navigate]);
 
-  // Only render the Component if the admin token exists
-  return adminToken ? <Component {...rest} /> : null;
+  // Show loading while checking authentication
+  if (isAuthenticated === null) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  // Only render component if authenticated
+  return isAuthenticated ? <Component {...rest} /> : null;
 };
 
 export default AdminPrivateRoute;

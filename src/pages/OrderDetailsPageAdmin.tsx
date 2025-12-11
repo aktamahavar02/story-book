@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Calendar,
   Package,
@@ -13,39 +13,22 @@ import {
   Star,
   Award,
   Heart,
-  Eye,
   Download,
   ChevronDown,
 } from "lucide-react";
-import Navbar from "@/components/ui/Navbar";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
-import { orderDetailsSingleAdmin , trackOrder } from "../../store/slices/bookTemplateSlice.js";
-import loadingImage from "../assets/images/purple.gif";
 import { Helmet } from "react-helmet-async";
-import {currencyList} from '../../store/slices/loginSlice.js';
+import { staticOrderDetails, staticCurrencyList } from "../utils/staticData";
 
 const OrderDetailsPageAdmin = () => {
-  const { orderId, personalizedBookId } = useParams();
-  const dispatch = useDispatch();
+  const { orderId } = useParams();
   const navigate = useNavigate();
   const [showTracking, setShowTracking] = React.useState(false);
   const [expandedItems, setExpandedItems] = React.useState({});
 
-  const orderDetailData = useSelector(
-    (state) => state?.bookTemplate?.orderDetailsAdmin?.data
-  );
-  const loading = useSelector((state) => state?.bookTemplate?.isOrderDetailsAdmin);
-
-  useEffect(() => {
-    if (orderId) {
-      dispatch(orderDetailsSingleAdmin({ id: orderId }));
-      // dispatch(trackOrder({ id: orderId }));
-    }
-  }, [orderId, dispatch]);
-
-  // Using the real data from the store instead of mock data
-  const order = orderDetailData;
+  // Static data
+  const loading = false;
+  const order = staticOrderDetails;
 
   // Extract recipient information from the order data
   const recipient = order?.recipient;
@@ -195,10 +178,7 @@ const OrderDetailsPageAdmin = () => {
     return <Package className="w-5 h-5" />;
   };
 
-  useEffect(() => {
-    dispatch(currencyList());
-  }, []);
-  const currencyListData = useSelector((state) => state?.auth?.currencyList);
+  const currencyListData = staticCurrencyList;
   const currency = currencyListData?.find(
     (item) => item?.currencyCode === order?.currency
   );

@@ -10,25 +10,12 @@ import {
   DialogOverlay,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useDispatch, useSelector } from "react-redux";
-import { adminBookTemplatePost } from "../../../store/slices/loginSlice.js";
-import loadingImage from "../../assets/images/purple.gif";
-import {
-  getTemplateAdmin,
-  bookTemplateGenerationAdmin,
-  bookTemplatePulingAdmin,
-  bookTemplateStatus,
-  templateDelete,
-} from "../../../store/slices/bookTemplateSlice.js";
 import Pagination from "./Pagination.js";
 import { useNavigate } from "react-router-dom";
 import BasicLoader from "@/components/ui/basicLoader.js";
-import {
-  uploadImage,
-  imageUploadHandle,
-} from "../../../store/slices/loginSlice.js";
 import { Helmet } from "react-helmet-async";
 import { MdDeleteForever } from "react-icons/md";
+import { staticTemplateDetailsAdmin, staticBookTemplateStats } from "../../utils/staticData";
 interface AgeRange {
   minAge: number;
   maxAge: number;
@@ -214,23 +201,14 @@ const BookTemplate = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [currentPollingId, setCurrentPollingId] = useState<string | null>(null);
   const navigate = useNavigate();
-  const templateList = useSelector(
-    (state) => state?.bookTemplate?.getTemplateAdminData
-  );
-  const bookTemplatePulingStatus = useSelector(
-    (state) => state?.bookTemplate?.bookTemplatePulingAdmin?.data?.pollingStatus
-  );
-  const isBookTemplateGeneration = useSelector(
-    (state) => state?.bookTemplate?.isBookTemplateGeneration
-  );
-  const isLoading = useSelector((state) => state?.bookTemplate?.isLoading);
-  const bookTemplate = useSelector(
-    (state) => state?.bookTemplate?.bookTemplateStatusData
-  );
+  // Static data
+  const templateList = staticTemplateDetailsAdmin;
+  const bookTemplatePulingStatus = false;
+  const isBookTemplateGeneration = false;
+  const isLoading = false;
+  const bookTemplate = { data: staticBookTemplateStats };
   const totalPages = templateList?.data?.totalPages || 1;
   const totalResults = templateList?.data?.totalResults || 1;
-
-  const dispatch = useDispatch();
   const initialValues: BookTemplateFormValues = {
     title: "",
     description: "",
@@ -271,115 +249,15 @@ const BookTemplate = () => {
   };
 
   const handleSubmit = async (values: BookTemplateFormValues) => {
-    // Check if referenceChildImage is a File that needs to be processed
-    const file = values?.referenceChildImage as File;
-    const payload = {
-      key: file.name,
-      contentType: file.type,
-      file,
-      onSuccess: (s3Url: string) => {
-        const updateUploadedImageUrl = s3Url.split("?")[0] || "";
-        const finalValues = {
-          ...values,
-          referenceChildImage: updateUploadedImageUrl,
-        };
-
-        dispatch(
-          imageUploadHandle({
-            imageUrl: s3Url,
-            file,
-
-            onSuccess: () => {
-              dispatch(
-                adminBookTemplatePost({
-                  ...finalValues,
-                  onSuccess: (item) => {
-                    dispatch(
-                      bookTemplateGenerationAdmin({
-                        id: item?.data?.id,
-                        onSuccess: () => {
-                          dispatch(
-                            getTemplateAdmin({
-                              // limit: 6,
-                              // page: currentPage,
-                              searchText: searchText,
-                            })
-                          );
-                          setCurrentPollingId(item?.data?.id);
-                          dispatch(
-                            bookTemplatePulingAdmin({ id: item?.data?.id })
-                          );
-                        },
-                      })
-                    );
-                  },
-                })
-              );
-            },
-          })
-        );
-      },
-    };
-
-    dispatch(uploadImage(payload));
+    // Static implementation - just close modal
+    setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    if (searchText) {
-      dispatch(
-        getTemplateAdmin({
-          limit: 6,
-          page: 1,
-          searchText: searchText,
-        })
-      );
-      setCurrentPage(1);
-    } else {
-      dispatch(
-        getTemplateAdmin({
-          limit: 6,
-          page: currentPage,
-          // searchText: "",
-        })
-      );
-    }
-  }, [dispatch, currentPage, searchText]);
-
-  useEffect(() => {
-    dispatch(bookTemplateStatus({}));
-  }, []);
-
-  useEffect(() => {
-    let pollingInterval: NodeJS.Timeout | null = null;
-
-    if (bookTemplatePulingStatus && currentPollingId) {
-      // Start polling when bookTemplatePulingStatus is true and we have an ID
-      pollingInterval = setInterval(() => {
-        dispatch(bookTemplatePulingAdmin({ id: currentPollingId }));
-      }, 2000);
-    } else if (pollingInterval) {
-      clearInterval(pollingInterval);
-      pollingInterval = null;
-      setIsModalOpen(false);
-    }
-
-    return () => {
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
-        setIsModalOpen(false);
-      }
-    };
-  }, [bookTemplatePulingStatus, currentPollingId, dispatch]);
+  // No useEffect needed for static data
 
   const handleDelete = (id) => {
-    dispatch(
-      templateDelete({
-        id,
-        onSuccess: () => {
-          dispatch(getTemplateAdmin({ limit: 6, page: currentPage }));
-        },
-      })
-    );
+    // Static implementation - no actual delete
+    console.log('Delete template:', id);
   };
 
   return (
@@ -1130,7 +1008,7 @@ const BookTemplate = () => {
           {/* Template Grid */}
           {isLoading ? (
             <div className="flex items-center justify-center my-10">
-              <img src={loadingImage} alt="image" className="w-28" />
+              <div className="w-28 h-28 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
             </div>
           ) : templateList?.data?.results?.length <= 0 &&
             searchText?.length > 0 ? (
@@ -1169,11 +1047,11 @@ const BookTemplate = () => {
                       );
                     }}
                   >
-                    <div className="relative">
+                    <div className="relative h-48">
                       <img
                         src={template?.coverImage}
                         alt={template.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-48 object-cover"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.src =

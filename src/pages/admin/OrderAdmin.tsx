@@ -1,30 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Calendar } from "lucide-react";
-import OrderDetailsModal from "@/components/modals/OrderDetailsModal";
-import Navbar from "@/components/ui/Navbar";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  adminOrderRes,
-  adminRecentOrder,
-} from "../../../store/slices/loginSlice.js";
-import loadingImage from "../../assets/images/purple.gif";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { staticRecentOrders } from "../../utils/staticData";
 
 const OrderAdmin = () => {
   const [expandedOrders, setExpandedOrders] = useState({});
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(adminOrderRes({}));
-    dispatch(adminRecentOrder({}));
-  }, []);
-  const recentOrderList = useSelector(
-    (state) => state?.auth?.adminRecentOrder?.data
-  );
-
-  const currencyData = useSelector((state) => state?.bookTemplate?.currency);
-   console.log("currencyData====", currencyData)
+  // Static data
+  const recentOrderList = { results: staticRecentOrders };
 
   return (
     <div className="p-6  mt-[66px]">

@@ -4,124 +4,41 @@ import BookCard from "@/components/ui/BookCard";
 import Footer from "@/components/ui/Footer";
 import ExploreSection from "@/components/ui/ExploreSection";
 import draftImage from "../assets/images/drafImage.jpg";
-import { useEffect, useState } from "react";
-import {
-  myBooksGet,
-  littleGet,
-  addCart,
-  bookTemplate,
-  personalizedBookCart,
-} from "../../store/slices/bookTemplateSlice.js";
+import { useState } from "react";
 import loadingImage from "../assets/images/purple.gif";
-import { useDispatch, useSelector } from "react-redux";
-import { Loader } from "@/components/ui/Loader.js";
-import BasicLoader from "@/components/ui/basicLoader.js";
-import GeoHelmet from "@/components/ui/GeoHelmet.js";
+import GeoHelmet from "@/components/ui/GeoHelmet";
+import { staticBooks, staticMyBooks } from "../utils/staticData";
 
 const MyBooksPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
-  const loadingBook = useSelector((state) => state?.bookTemplate?.isBook);
-  const handleNavigation = (path: string) => {
-    navigate(path);
-    setTimeout(() => window.scrollTo(0, 0), 100);
-  };
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-  useEffect(() => {
-    dispatch(myBooksGet({ page: currentPage, limit: 12 }));
-  }, [currentPage]);
-  // dispatch(profile());
-  useEffect(() => {
-    dispatch(littleGet({}));
-  }, []);
-  const myBook = useSelector((state) => state?.bookTemplate?.myBooksData);
+  const [loading] = useState(false);
+  const [loadingBook] = useState(false);
+  
+  // Static data
+  const myBookData = staticMyBooks;
 
-  const loading = useSelector((state) => state?.bookTemplate?.isLoading);
-  const myBookData = myBook?.results || [];
+  const bookTemplatesDate = staticBooks.slice(0, 3);
 
-  const myBookDatas = (myBookData || [])
-
-    .filter((card) => card?.genreId?.name === "Educational")
-    .slice(0, 4);
-
-  const littleData = useSelector((state) => state?.bookTemplate?.littleData);
-  const boyBooks = (littleData || [])
-    .filter((card) => card?.idealFor === "boy")
-    .slice(0, 4);
-
-  useEffect(() => {
-    const queryParams = {
-      page: 1,
-      limit: 10,
-    };
-
-    dispatch(bookTemplate(queryParams)); // ✅ FLAT PARAM OBJECT
-  }, []);
-
-  const bookTemplates = useSelector(
-    (state) => state?.bookTemplate?.bookTemplateData,
-  );
-
-  const bookTemplatesDate = bookTemplates?.results || [];
-  const isCartLoading = useSelector(
-    (state) => state?.bookTemplate?.isCartLoading,
-  );
-
-  const [loadingCardId, setLoadingCardId] = useState(null);
-
-  const [updatedCards, setUpdatedCards] = useState({});
   const handleCart = (card) => {
-    if (loadingCardId === card?.id) {
-      return <BasicLoader />;
-    }
-    // Check local updated state first
-    const isInCart = updatedCards[card?.id]?.isBookInCart ?? card?.isBookInCart;
-
-    if (card?.paymentStatus === "pending" && !isInCart) {
+    if (card?.paymentStatus === "pending") {
       return "Add to Cart";
-    } else if (card?.paymentStatus === "pending" && isInCart) {
-      return "Continue Order";
     } else if (card?.paymentStatus === "paid") {
-      return card?.isPreview ? "Order Now" : "View Personalize";
+      return "View Book";
     }
+    return "View";
   };
 
   const handleClick = (card) => {
-    if (card?.paymentStatus === "pending" && !card.isBookInCart) {
-      setLoadingCardId(card?.id);
-      dispatch(
-        addCart({
-          id: card?.id,
-          isBookInCart: true,
-          onSuccess: () => {
-            // Immediately update local state
-            navigate("/cart");
-            setUpdatedCards((prev) => ({
-              ...prev,
-              [card?.id]: { ...card, isBookInCart: true },
-            }));
-            setLoadingCardId(null);
-            dispatch(myBooksGet({ page: currentPage, limit: 12 }));
-            dispatch(personalizedBookCart());
-          },
-          onError: () => {
-            setLoadingCardId(null);
-          },
-        }),
-      );
-    } else if (card?.paymentStatus === "pending" && card.isBookInCart) {
+    if (card?.paymentStatus === "pending") {
       navigate("/cart");
     } else if (card?.paymentStatus === "paid") {
       navigate(`/setup/${card?.id}`);
     }
   };
-  const isNavbarOpen = useSelector(
-    (state) => state?.bookTemplate?.isNavbarOpen,
-  );
-  const currencyData = useSelector((state) => state?.bookTemplate?.currency);
+  
+  const [isNavbarOpen] = useState(false);
+  const currencyData = { currencyCode: "USD" };
   // Create schema for My Books page
   const createMyBooksSchema = () => {
     const baseUrl = "https://www.starmebooks.com";
@@ -431,9 +348,9 @@ const MyBooksPage = () => {
     };
   };
 
-  const totalPages = myBook?.totalPages || 1;
-  const hasNextPage = myBook?.hasNextPage;
-  const hasPrevPage = myBook?.hasPrevPage;
+  const totalPages = 1;
+  const hasNextPage = false;
+  const hasPrevPage = false;
   return (
     <div className="min-h-screen relative ">
       <GeoHelmet
@@ -447,8 +364,8 @@ const MyBooksPage = () => {
       <div className="sticky top-0  z-40">
         <Navbar />
       </div>{" "}
-      <div className={` ${isNavbarOpen ? "blur-sm" : ""}  `}>
-        <div className="absolute inset-0 -top-28 w-full  border border-red-700">
+      <div>
+        <div className="absolute inset-0 -top-28 w-full">
           <img
             src="	https://resources.wonderwraps.com/a10db3cd-8d51-4c1e-9442-3b46e70493a5/img/fillers.png"
             className="hidden md:block w-full opacity-50"

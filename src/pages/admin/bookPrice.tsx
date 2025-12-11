@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getBookPriceAdmin,
-  updateBookPrice,
-} from "../../../store/slices/bookTemplateSlice.js";
-import loadingImage from "../../assets/images/purple.gif";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { staticBookPrices } from "../../utils/staticData";
 
 const BookPrice = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,21 +10,8 @@ const BookPrice = () => {
     isActive: false,
   });
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getBookPriceAdmin({}));
-  }, []);
-
-  const listPrice = useSelector(
-    (state) => state?.bookTemplate?.getBookPriceAdminData
-  );
-
-  const priceData = Array.isArray(listPrice?.data)
-    ? listPrice?.data
-    : Array.isArray(listPrice?.data?.results)
-    ? listPrice?.data?.results
-    : [];
+  // Static data
+  const priceData = staticBookPrices;
 
   const handleEditClick = (user) => {
     setSelectedItem(user);
@@ -51,18 +33,8 @@ const BookPrice = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    dispatch(
-      updateBookPrice({
-        id: selectedItem._id,
-        ...formData,
-        onSuccess: () => {
-          handleCloseModal();
-
-          dispatch(getBookPriceAdmin({}));
-        },
-      })
-    );
+    // Static implementation - just close modal
+    handleCloseModal();
   };
 
   const handleInputChange = (e) => {
@@ -72,9 +44,7 @@ const BookPrice = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-  const isLoading = useSelector(
-    (state: any) => state?.bookTemplate?.isLoading
-  );
+  const isLoading = false;
 
   return (
     <div className="p-6 mt-[66px]">

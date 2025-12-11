@@ -1,14 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  getTemplateDetailsAdmin,
-  bookChaptersUpdateAdmin,
-} from "../../../store/slices/bookTemplateSlice.js";
-import loadingImage from "../../assets/images/purple.gif";
-import TemplateEditModal from "../../components/TemplateEditModal";
 import { Helmet } from "react-helmet-async";
 import { MdClose } from "react-icons/md";
+import { staticTemplateDetails } from "../../utils/staticData";
 
 // Define TypeScript interfaces for our data
 interface AgeRange {
@@ -85,20 +79,12 @@ interface BookTemplate {
 const TemplateDetails = () => {
   const [error, setError] = useState<string | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const isLoadBook = useSelector((state) => state?.bookTemplate?.isLoading);
-  const bookResponse = useSelector(
-    (state) => state?.bookTemplate?.getTemplateDetailsAdmin?.data
-  );
-
   const { templateId } = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (templateId) {
-      dispatch(getTemplateDetailsAdmin({ id: templateId }));
-    }
-  }, [templateId]);
+  // Static data
+  const isLoadBook = false;
+  const bookResponse = staticTemplateDetails;
 
   // Loading state
 
@@ -161,16 +147,8 @@ const TemplateDetails = () => {
 
   // Handle saving updated template
   const handleSave = (updatedTemplate: BookTemplate) => {
-    dispatch(
-      bookChaptersUpdateAdmin({
-        id: templateId,
-        ...updatedTemplate,
-        onSuccess: () => {
-          setIsEditModalOpen(false);
-          dispatch(getTemplateDetailsAdmin({ id: templateId }));
-        },
-      })
-    );
+    // Static implementation - just close modal
+    setIsEditModalOpen(false);
   };
 
   return (
@@ -549,14 +527,7 @@ const TemplateDetails = () => {
           </div>
         </div>
       </div>
-      {isEditModalOpen && (
-        <TemplateEditModal
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          template={bookResponse}
-          onSave={handleSave}
-        />
-      )}
+      {/* Template edit modal removed for static version */}
     </div>
   );
 };

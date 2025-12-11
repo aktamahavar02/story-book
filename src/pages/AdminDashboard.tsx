@@ -23,10 +23,7 @@ import {
 import { IoPricetagsSharp } from "react-icons/io5";
 import { HiUserGroup } from "react-icons/hi";
 import { GiMoneyStack } from "react-icons/gi";
-import { cookie } from "../utils/cookies.js";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { adminLogout } from "../../store/slices/loginSlice.js";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/svgs/logo.svg";
 import { FaMicroblog } from "react-icons/fa";
 import { Link, Routes, Route, Navigate } from "react-router-dom";
@@ -34,64 +31,34 @@ import Users from "./admin/Users";
 import BookTemplate from "./admin/BookTemplate";
 import Blogs from "./admin/Blogs";
 import Orders from "./admin/Orders";
-import {
-  adminDashboardRes,
-  adminRevenueRes,
-  adminRecentOrder,
-  adminCountryChart,
-} from "../../store/slices/loginSlice.js";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { AiOutlineClose } from "react-icons/ai";
-import { profile } from "../../store/slices/loginSlice.js";
+import { cookie } from "../utils/cookies";
+import { staticAdminStats, staticRevenueData, staticCountryData, staticRecentOrders, staticAdmin } from "../utils/staticData";
 import CreateForm from "./CreateForm.js";
-import BlogsDetailsAdmin from "./admin/BlogsDetailsAdmin.js";
-import TemplateDetails from "./admin/TemplateDetails.js";
-import BookPrice from "./admin/bookPrice.js";
-import CouponCodeAdd from "./admin/couponCodeAdd.js";
-import { RiCoupon3Fill } from "react-icons/ri";
-import Category from "./admin/Category.js";
-import { BiSolidCategory } from "react-icons/bi";
-import { FaqAdmin } from "./admin/faqAdmin.js";
-import { FaQuestionCircle } from "react-icons/fa";
-import OrderDetailsPageAdmin from "./OrderDetailsPageAdmin.js";
+import BlogsDetailsAdmin from "./admin/BlogsDetailsAdmin.tsx";
+import TemplateDetails from "./admin/TemplateDetails.tsx";
+import BookPrice from "./admin/bookPrice.tsx";
+import OrderDetailsPageAdmin from "./OrderDetailsPageAdmin.tsx";
 import { Helmet } from "react-helmet-async";
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [expandedOrders, setExpandedOrders] = useState({});
-  const [expandedCategory, setExpandedCategory] = useState(false);
-  const adminRefreshToken = cookie.get("adminRefreshToken");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const location = useLocation();
 
-  useEffect(() => {
-    dispatch(adminDashboardRes({}));
-    dispatch(adminCountryChart({}));
-    dispatch(adminRecentOrder({}));
-    dispatch(adminRevenueRes({}));
-  }, []);
+  // Static data
+  const adminList = { data: staticAdminStats };
+  const recentOrderList = { results: staticRecentOrders };
+  const revenueList = { data: staticRevenueData };
+  const finalChartsData = staticCountryData;
+  const profileData = staticAdmin;
 
-  const adminList = useSelector((state) => state?.auth?.adminDashboardData);
-  const recentOrderList = useSelector(
-    (state) => state?.auth?.adminRecentOrder?.data
-  );
-  const revenueList = useSelector((state) => state?.auth?.adminRevenueData);
-  const geoChartsData = useSelector((state) => state?.auth?.adminCountryChart);
-  const profileData = useSelector((state: any) => state?.auth?.profile);
-  const countryChartsData =
-    geoChartsData?.data?.map((item) => [
-      item?.countryName,
-      item?.totalAmount,
-    ]) || [];
-  const finalChartsData = [["Country", "Users"], ...countryChartsData];
-
-  const revBar = revenueList?.data?.map((data) => {
-    return {
-      name: data?.monthYear,
-      revenue: data?.totalAmount,
-    };
-  });
+  const revBar = staticRevenueData.map((data) => ({
+    name: data.monthYear,
+    revenue: data.totalAmount,
+  }));
 
   const COLORS = ["#4f46e5", "#10b981", "#ef4444"];
 
@@ -192,9 +159,7 @@ const AdminDashboard = () => {
   // const totalPages = OrderList?.data?.totalPages || 1;
   // const totalResults = OrderList?.data?.totalResults || 1;
 
-  useEffect(() => {
-    dispatch(profile());
-  }, []);
+  // No useEffect needed for static data
   return (
     <div
       className={`flex  ${
@@ -428,185 +393,15 @@ const AdminDashboard = () => {
               </Link>
             </li>
 
-            <li className="mb-2 mx-2">
-              <Link
-                to="/admin/coupon"
-                className={`flex items-center p-3 rounded-lg transition ${
-                  location.pathname === "/admin/coupon"
-                    ? "bg-[#ECF3FF] text-[#465FFF]"
-                    : "hover:bg-[#ECF3FF] hover:text-[#465FFF] text-black"
-                }`}
-              >
-                <span className="mr-3">
-                  <RiCoupon3Fill
-                    className={
-                      location.pathname === "/admin/coupon"
-                        ? "text-[#465FFF]"
-                        : "text-blue-700"
-                    }
-                  />
-                </span>
-                <span
-                 onClick={()=>{
-                  setSidebarOpen(false);
-                }}
-                  className={
-                    location.pathname === "/admin/coupon"
-                      ? "text-[#465FFF]"
-                      : ""
-                  }
-                >
-                  Coupon Code
-                </span>
-              </Link>
-            </li>
-            <li className="mb-2 mx-2">
-              <Link
-                to="/admin/faq"
-                className={`flex items-center p-3 rounded-lg transition ${
-                  location.pathname === "/admin/faq"
-                    ? "bg-[#ECF3FF] text-[#465FFF]"
-                    : "hover:bg-[#ECF3FF] hover:text-[#465FFF] text-black"
-                }`}
-              >
-                <span className="mr-3">
-                  <FaQuestionCircle
-                    className={
-                      location.pathname === "/admin/faq"
-                        ? "text-[#465FFF]"
-                        : "text-blue-700"
-                    }
-                  />
-                </span>
-                <span
-                 onClick={()=>{
-                  setSidebarOpen(false);
-                }}
-                  className={
-                    location.pathname === "/admin/faq" ? "text-[#465FFF]" : ""
-                  }
-                >
-                  FAQ
-                </span>
-              </Link>
-            </li>
-            <li className="mb-2 mx-2">
-              <div
-                onClick={() => setExpandedCategory(!expandedCategory)}
-                className={`flex items-center p-3 rounded-lg transition cursor-pointer ${
-                  location.pathname.startsWith("/admin/category")
-                    ? "bg-[#ECF3FF] text-[#465FFF]"
-                    : "hover:bg-[#ECF3FF] hover:text-[#465FFF] text-black"
-                }`}
-              >
-                <span className="mr-3">
-                  <BiSolidCategory
-                    className={
-                      location.pathname.startsWith("/admin/category")
-                        ? "text-[#465FFF]"
-                        : "text-blue-700"
-                    }
-                  />
-                </span>
-                <span
-                  className={
-                    location.pathname.startsWith("/admin/category")
-                      ? "text-[#465FFF] flex-1"
-                      : "flex-1"
-                  }
-                >
-                  Category
-                </span>
-                <span className="ml-2">
-                  {expandedCategory ? (
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 15l7-7 7 7"
-                      ></path>
-                    </svg>
-                  ) : (
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 9l-7 7-7-7"
-                      ></path>
-                    </svg>
-                  )}
-                </span>
-              </div>
-              {/* Submenu items - only show when expanded */}
-              {expandedCategory && (
-                <ul className="ml-8 mt-1 space-y-1">
-                  <li>
-                    <Link
-                      to="/admin/category?type=character"
-                      className={`flex items-center p-2 rounded-lg transition ${
-                        location.pathname === "/admin/category" &&
-                        location.search.includes("type=character")
-                          ? "bg-[#ECF3FF] text-[#465FFF]"
-                          : "hover:bg-[#ECF3FF] hover:text-[#465FFF] text-black"
-                      }`}
-                    >
-                      <span className="text-sm ml-2">Character</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/admin/category?type=adventure"
-                      className={`flex items-center p-2 rounded-lg transition ${
-                        location.pathname === "/admin/category" &&
-                        location.search.includes("type=adventure")
-                          ? "bg-[#ECF3FF] text-[#465FFF]"
-                          : "hover:bg-[#ECF3FF] hover:text-[#465FFF] text-black"
-                      }`}
-                    >
-                      <span className="text-sm ml-2">Adventure</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/admin/category?type=morality"
-                      className={`flex items-center p-2 rounded-lg transition ${
-                        location.pathname === "/admin/category" &&
-                        location.search.includes("type=morality")
-                          ? "bg-[#ECF3FF] text-[#465FFF]"
-                          : "hover:bg-[#ECF3FF] hover:text-[#465FFF] text-black"
-                      }`}
-                    >
-                      <span className="text-sm ml-2">Morality</span>
-                    </Link>
-                  </li>
-                </ul>
-              )}
-            </li>
+
+
+
             <li
               className="mb-2 mx-2 text-red-500"
               onClick={() => {
-                dispatch(
-                  adminLogout({
-                    refreshToken: adminRefreshToken,
-                    onSuccess: () => {
-                      navigate("/admin/login");
-                    },
-                  })
-                );
+                cookie.remove("adminToken");
+                localStorage.removeItem("admin");
+                navigate("/admin/login", { replace: true });
               }}
             >
               <div className="flex items-center p-3 hover:bg-white rounded-lg transition cursor-pointer">
@@ -643,12 +438,6 @@ const AdminDashboard = () => {
               {location.pathname === "/admin/orders" && "Order Management"}
               {location.pathname === "/admin/book-price" &&
                 "Book Price Management "}
-              {location.pathname === "/admin/coupon" &&
-                "Coupon Code Management "}{" "}
-              {location.pathname === "/admin/faq" && "Frequently Asked Questions Management "}
-              {(location.pathname === "/admin/category" ||
-                location.pathname.startsWith("/admin/category")) &&
-                "Category Management "}
             </h2>
             <div className="flex items-center space-x-4">
               <button className="p-2 text-gray-500 hover:text-gray-700">
@@ -986,10 +775,7 @@ const AdminDashboard = () => {
           <Route path="edit/:id?" element={<CreateForm />} />
           <Route path="blog/:id" element={<BlogsDetailsAdmin />} />
           <Route path="templateDetails/:id" element={<TemplateDetails />} />
-          <Route path="book-price" element={<BookPrice />} />
-          <Route path="coupon" element={<CouponCodeAdd />} />
-          <Route path="category" element={<Category />} />
-          <Route path="faq" element={<FaqAdmin />} /> 
+          <Route path="book-price" element={<BookPrice />} /> 
           <Route
             path="/order-details/:orderId"
             element={<OrderDetailsPageAdmin />}

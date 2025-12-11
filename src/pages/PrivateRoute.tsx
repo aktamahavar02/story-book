@@ -1,32 +1,34 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cookie } from "../utils/cookies";
-import { profile } from '../../store/slices/loginSlice.js';
-import { useDispatch } from "react-redux";
-const PrivateRoute = ({ Component , ...rest}: { Component: React.FC }) => {
+
+interface PrivateRouteProps {
+  Component: React.ComponentType<any>;
+  [key: string]: any;
+}
+
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ Component, ...rest }) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const token = cookie.get("token");
-  const adminToken = cookie.get("adminToken");
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   
   useEffect(() => {
-    // If user doesn't have a regular token, redirect to login
-    if (!token) {
-      navigate("/login");
-    } 
-    // If user has both tokens (rare case) or only admin token, redirect to admin login
-    // This handles the case where an admin tries to access user routes
-    else if (adminToken) {
-      // Admins should use admin routes, redirect to admin dashboard
-      navigate("/admin/dashboard"); 
+    const token = cookie.get("token");
+    
+    if (token) {
+      setIsAuthenticated(true);
     } else {
-      // Regular user with only user token can proceed
-      // dispatch(profile());
+      setIsAuthenticated(false);
+      navigate("/login", { replace: true });
     }
-  }, [token, adminToken, dispatch, navigate]);
+  }, [navigate]);
 
-  // ✅ Only render the Component if the user token exists and no admin token exists
-  return token && !adminToken ? <Component {...rest} /> : null;
+  // Show loading while checking authentication
+  if (isAuthenticated === null) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  // Only render component if authenticated
+  return isAuthenticated ? <Component {...rest} /> : null;
 };
 
 export default PrivateRoute;

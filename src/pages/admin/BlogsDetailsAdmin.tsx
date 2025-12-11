@@ -1,60 +1,22 @@
-import Navbar from "@/components/ui/Navbar";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  blogSingleGet,
-  blogSingleGetUser,
-  blogGet,
-  blogGetUser,
-} from "../../../store/slices/bookTemplateSlice.js";
+import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import BlogCards from "@/components/ui/BlogCards.js";
-import Footer from "@/components/ui/Footer.js";
 import { FaCaretDown } from "react-icons/fa";
-import loadingImage from "../../assets/images/purple.gif";
-
-import { profile } from "../../../store/slices/loginSlice.js";
 import { Helmet } from "react-helmet-async";
+import { staticBlogs, staticAdmin } from "../../utils/staticData";
 
 const BlogsDetailsAdmin = () => {
-  const dispatch = useDispatch();
   const [loaded, setLoaded] = useState(false);
   const { id } = useParams();
   const location = useLocation();
-
-  const profileData = useSelector((state: any) => state?.auth?.profile);
-  const admin = profileData?.role === "admin";
   const [isTocOpen, setIsTocOpen] = useState(false);
 
-  const blogSingleData = useSelector(
-    (state) => state?.bookTemplate?.blogSingleGetData
-  );
-  const isLoading = useSelector((state) => state?.bookTemplate?.isBlogSingle);
-
-  const blogSingleDataUser = useSelector(
-    (state) => state?.bookTemplate?.blogSingleGetDataUser
-  );
-
-  const user = profileData?.role === "user";
-
-  useEffect(() => {
-    dispatch(profile());
-  }, []);
-  useEffect(() => {
-    dispatch(blogGet({ limit: 8, page: 1 }));
-  }, []);
-  useEffect(() => {
-    dispatch(blogSingleGet({ id: id }));
-  }, []);
-
-  const blogList = useSelector((state) => state?.bookTemplate?.blogGet);
-  const blogListUser = useSelector((state) => state?.bookTemplate?.blogGetUser);
-  const blogData = blogList?.data?.results;
-  const blogDataUser = blogListUser?.data?.results;
-  const blogGetData = admin ? blogData : blogDataUser;
-  const dataAdmin = blogSingleData?.data;
-  const userData = blogSingleDataUser?.data;
-  const data = admin ? dataAdmin : userData;
+  // Static data
+  const admin = true; // Always admin in admin panel
+  const profileData = staticAdmin;
+  const blogGetData = staticBlogs;
+  const data = staticBlogs.find(blog => blog.id === id) || staticBlogs[0];
+  const isLoading = false;
 
   const d1 = new Date(data?.updatedAt);
   const formatted1 = d1.toLocaleDateString("en-GB")?.replace(/\//g, "-");
@@ -74,9 +36,7 @@ const BlogsDetailsAdmin = () => {
     return `<${tag} id="${id}">${text}</${tag}>`;
   });
 
-  const isNavbarOpen = useSelector(
-    (state) => state?.bookTemplate?.isNavbarOpen
-  );
+  const isNavbarOpen = false;
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {

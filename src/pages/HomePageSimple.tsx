@@ -5,16 +5,9 @@ import frontPicture from "../assets/images/front-home.jpg";
 import Footer from "@/components/ui/Footer";
 import Navbar from "@/components/ui/Navbar";
 import BookCard from "@/components/ui/BookCard";
-import { useEffect } from "react";
-import {
-  littleGet,
-  blogGetUser,
-  reviewGet,
-  faqsData,
-} from "../../store/slices/bookTemplateSlice.js";
-import { useDispatch, useSelector } from "react-redux";
+import adoredHome from "../assets/images/adored-home.png";
+import { useState } from "react";
 import loadingGif from "../assets/animations/book.gif";
-import { bookTemplate } from "../../store/slices/bookTemplateSlice.js";
 import loadingImage from "../assets/images/purple.gif";
 import GeoHelmet from "@/components/ui/GeoHelmet.js";
 import firefighter from "../assets/images/firefighter.png";
@@ -26,127 +19,99 @@ import arrowGreen1 from "../assets/images/arrowGreen1.svg";
 import arrowGreen2 from "../assets/images/arrowGreen2.svg";
 import arrowGreen3 from "../assets/images/arrowGreen3.svg";
 import arrowGreen4 from "../assets/images/arrowGreen4.svg";
+import CharacterView from "@/components/ui/CharacterView.js";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [loading] = useState(false);
   
   // const booksPaginatedData = useSelector(
   //   (state) => state?.bookTemplate?.bookTemplateData?.results
   // );
   //  console.log("=====",booksPaginatedData);
 
-
-const booksPaginatedData = 
-   [
+  const booksPaginatedData = [
     {
-        "title": "ABC Journey With Girl",
-        "description": "Join your child on a fun-filled adventure as they explore the alphabet! From apples to zebras, each letter comes to life with exciting items and playful activities. Watch as your child discovers a new favorite for every letter, making learning fun and personalized with their own name. This interactive ABC journey encourages a love for learning through vibrant illustrations and familiar objects.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/69032a65d8105b382cb77736/coverImage/69032ba6d8105b382w3e1e.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173654Z&X-Amz-Expires=3600&X-Amz-Signature=e023cde034d6ea696476b22a3f9a431d5a2203e74fa716b12f3c7c4075f20156&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36a2",
-            "minAge": 3,
-            "maxAge": 4
-        },
-        "idealFor": "girl",
-        "discountPct": 10,
-        "orderCount": 7,
-        "id": "68ad3607fc29be1873fc36a1"
+      "title": "ABC Journey With Girl",
+      "description": "Join your child on a fun-filled adventure as they explore the alphabet! From apples to zebras...",
+      "coverImage": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=400&fit=crop",
+      "ageRange": { "_id": "68ad3607fc29be1873fc36a2", "minAge": 3, "maxAge": 4 },
+      "idealFor": "girl",
+      "discountPct": 10,
+      "orderCount": 7,
+      "id": "68ad3607fc29be1873fc36a1"
     },
     {
-        "title": "Girl and the Moon Goddess",
-        "description": "Take your child on a whimsical journey filled with laughter, friendship, and discovery! Follow along as they explore the wonders of a sunny day with their trusty companion, Fluffy, from playing at home to enjoying a picnic by the sparkling lake. This adventure will fill their heart with joy and spark their imagination.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173654Z&X-Amz-Expires=3600&X-Amz-Signature=43b88975a7ecbcd6ad74f8ec7e18828ef4e4a85923d92ff2ca0f266e1aa89986&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36ab",
-            "minAge": 5,
-            "maxAge": 10
-        },
-        "idealFor": "girl",
-        "discountPct": 10,
-        "id": "68ad3607fc29be1873fc36aa"
+      "title": "Girl and the Moon Goddess",
+      "description": "Take your child on a whimsical journey filled with laughter...",
+      "coverImage": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop",
+      "ageRange": { "_id": "68ad3607fc29be1873fc36ab", "minAge": 5, "maxAge": 10 },
+      "idealFor": "girl",
+      "discountPct": 10,
+      "id": "68ad3607fc29be1873fc36aa"
     },
     {
-        "title": "Princess! We've been waiting for you ",
-        "description": "The adventure continues in Volume 2 of Princess and the Glowing Flower! Summoned by the Enchanted Forest itself, the Princess must prove her kind and brave heart to become the true Guardian of the Forest. A beautifully personalized tale of courage, kindness, and believing in your own magic.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173654Z&X-Amz-Expires=3600&X-Amz-Signature=43b88975a7ecbcd6ad74f8ec7e18828ef4e4a85923d92ff2ca0f266e1aa89986&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36b7",
-            "minAge": 4,
-            "maxAge": 10
-        },
-        "idealFor": "girl",
-        "discountPct": 10,
-        "id": "68ad3607fc29be1873fc36b6"
+      "title": "Princess! We've been waiting for you ",
+      "description": "The adventure continues in Volume 2 of Princess and the Glowing Flower...",
+      "coverImage": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop",
+      "ageRange": { "_id": "68ad3607fc29be1873fc36b7", "minAge": 4, "maxAge": 10 },
+      "idealFor": "girl",
+      "discountPct": 10,
+      "id": "68ad3607fc29be1873fc36b6"
     },
     {
-        "title": "Boy The Dinos Need You",
-        "description": "Imagine waking up to find a glowing dinosaur footprint that whisks your child away to Dino Valley, a magical place where talking dinosaurs need help after a mighty storm! This personalized adventure brings excitement, bravery, and friendship to life like never before.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173654Z&X-Amz-Expires=3600&X-Amz-Signature=43b88975a7ecbcd6ad74f8ec7e18828ef4e4a85923d92ff2ca0f266e1aa89986&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36ba",
-            "minAge": 3,
-            "maxAge": 6
-        },
-        "idealFor": "boy",
-        "discountPct": 10,
-        "orderCount": 1,
-        "id": "68ad3607fc29be1873fc36b9"
+      "title": "Boy The Dinos Need You",
+      "description": "Imagine waking up to find a glowing dinosaur footprint...",
+      "coverImage": "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=400&fit=crop",
+      "ageRange": { "_id": "68ad3607fc29be1873fc36ba", "minAge": 3, "maxAge": 6 },
+      "idealFor": "boy",
+      "discountPct": 10,
+      "orderCount": 1,
+      "id": "68ad3607fc29be1873fc36b9"
     },
     {
-        "title": "The Amazing Adventures of {{{{childName}}}}",
-        "description": "A heartwarming story about a boy who loves ice cream but learns that kindness is even sweeter. When a lost kitten needs help, he bravely rescues her and discovers that small acts of compassion bring the biggest rewards. This personalized tale turns every page into a special moment of friendship, courage, and joy.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173654Z&X-Amz-Expires=3600&X-Amz-Signature=43b88975a7ecbcd6ad74f8ec7e18828ef4e4a85923d92ff2ca0f266e1aa89986&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "minAge": 3,
-            "maxAge": 5
-        },
-        "idealFor": "boy",
-        "discountPct": 10,
-        "orderCount": 25,
-        "id": "68ad3607fc29be1873fc36bf"
+      "title": "The Amazing Adventures of {{{{childName}}}}",
+      "description": "A heartwarming story about a boy who loves ice cream...",
+      "coverImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+      "ageRange": { "minAge": 3, "maxAge": 5 },
+      "idealFor": "boy",
+      "discountPct": 10,
+      "orderCount": 25,
+      "id": "68ad3607fc29be1873fc36bf"
     },
     {
-        "title": "Little Girl Explores Nature",
-        "description": "A little explorer is off on a wild adventure to visit nature’s most beautiful wonders. From sparking lakes and buzzing bees to sleeping creatures in the forest and sea, each page has something new to discover. It’s a journey full of laughter, wonders, and a whole lot of heart. Nature’s wonders are all around us, waiting to be found, one little adventure at a time.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173654Z&X-Amz-Expires=3600&X-Amz-Signature=43b88975a7ecbcd6ad74f8ec7e18828ef4e4a85923d92ff2ca0f266e1aa89986&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36c3",
-            "minAge": 2,
-            "maxAge": 6
-        },
-        "idealFor": "girl",
-        "discountPct": 10,
-        "orderCount": 2,
-        "id": "68ad3607fc29be1873fc36c2"
+      "title": "Little Girl Explores Nature",
+      "description": "A little explorer is off on a wild adventure...",
+      "coverImage": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=400&fit=crop",
+      "ageRange": { "_id": "68ad3607fc29be1873fc36c3", "minAge": 2, "maxAge": 6 },
+      "idealFor": "girl",
+      "discountPct": 10,
+      "orderCount": 2,
+      "id": "68ad3607fc29be1873fc36c2"
     },
     {
-        "title": "The Adventure of Boy and the Lost Star",
-        "description": "In this magical adventure, your child helps a lost star find its way back to the sky, learning valuable lessons about courage, kindness, and friendship along the way. This personalized story places your child at the heart of the adventure, making them the star of their very own journey.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173654Z&X-Amz-Expires=3600&X-Amz-Signature=5b15c587dfa6f0241f43e95832cfa83851b2900782072aec6d0f9ac4b94c17fa&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36c6",
-            "minAge": 2,
-            "maxAge": 4
-        },
-        "idealFor": "boy",
-        "discountPct": 10,
-        "id": "68ad3607fc29be1873fc36c5"
+      "title": "The Adventure of Boy and the Lost Star",
+      "description": "In this magical adventure, your child helps a lost star...",
+      "coverImage": "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=400&h=400&fit=crop",
+      "ageRange": { "_id": "68ad3607fc29be1873fc36c6", "minAge": 2, "maxAge": 4 },
+      "idealFor": "boy",
+      "discountPct": 10,
+      "id": "68ad3607fc29be1873fc36c5"
     },
     {
-        "title": "Peekaboo, Baby Found You",
-        "description": "Where are my toes? My nose? My tummy? A joyful, rhyming journey discovering every wiggly, giggly part of their body! This sweet and simple personalized book is perfect for little ones learning about themselves through fun and playful words.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173654Z&X-Amz-Expires=3600&X-Amz-Signature=5b15c587dfa6f0241f43e95832cfa83851b2900782072aec6d0f9ac4b94c17fa&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36c9",
-            "minAge": 1,
-            "maxAge": 2
-        },
-        "idealFor": "boy/girl",
-        "discountPct": 10,
-        "id": "68ad3607fc29be1873fc36c8"
+      "title": "Peekaboo, Baby Found You",
+      "description": "Where are my toes? My nose? My tummy?",
+      "coverImage": "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=400&fit=crop",
+      "ageRange": { "_id": "68ad3607fc29be1873fc36c9", "minAge": 1, "maxAge": 2 },
+      "idealFor": "boy/girl",
+      "discountPct": 10,
+      "id": "68ad3607fc29be1873fc36c8"
     }
-]
+  ];
+  
+
+
+  
   
   const handleGetStarted = () => {
     navigate("/template-selection");
@@ -156,547 +121,208 @@ const booksPaginatedData =
     navigate("/from-scratch");
   };
 
-  const queryParams = {
-    order: "desc",
-    sort: "createdAt",
-    limit: 8,
-  };
+  // Static data - no API calls needed
 
-  useEffect(() => {
-    dispatch(littleGet({}));
-    dispatch(bookTemplate(queryParams));
-
-  }, []);
-
- 
-const littleData =
-  [
+  const littleData = [
     {
-        "title": "ABC Journey With Girl",
-        "description": "Join your child on a fun-filled adventure as they explore the alphabet! From apples to zebras, each letter comes to life with exciting items and playful activities. Watch as your child discovers a new favorite for every letter, making learning fun and personalized with their own name. This interactive ABC journey encourages a love for learning through vibrant illustrations and familiar objects.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/69032a65d8105b382cb77736/coverImage/69032ba6d8105b382w3e1e.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=a9afaf99116a195796acacd410afb0a4739c70e8660a8a40d33848e5c95d7860&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36a2",
-            "minAge": 3,
-            "maxAge": 4
-        },
-        "idealFor": "girl",
-        "discountPct": 10,
-        "genreId": {
-            "name": "Curious Researcher",
-            "id": "686f891f066850b7c44d1616"
-        },
-        "id": "68ad3607fc29be1873fc36a1"
+      "title": "ABC Journey With Girl",
+      "description": "Join your child on a fun-filled adventure as they explore the alphabet! From apples to zebras, each letter comes to life with exciting items and playful activities. Watch as your child discovers a new favorite for every letter, making learning fun and personalized with their own name. This interactive ABC journey encourages a love for learning through vibrant illustrations and familiar objects.",
+      "coverImage": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=400&fit=crop",
+      "ageRange": {
+        "_id": "68ad3607fc29be1873fc36a2",
+        "minAge": 3,
+        "maxAge": 4
+      },
+      "idealFor": "girl",
+      "discountPct": 10,
+      "genreId": {
+        "name": "Curious Researcher",
+        "id": "686f891f066850b7c44d1616"
+      },
+      "id": "68ad3607fc29be1873fc36a1"
     },
     {
-        "title": "Girl and the Moon Goddess",
-        "description": "Take your child on a whimsical journey filled with laughter, friendship, and discovery! Follow along as they explore the wonders of a sunny day with their trusty companion, Fluffy, from playing at home to enjoying a picnic by the sparkling lake. This adventure will fill their heart with joy and spark their imagination.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=1bec286d24834d89bbaa1718d988dd95265ae2186694c0fdb2ee9f68602dd029&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36ab",
-            "minAge": 5,
-            "maxAge": 10
-        },
-        "idealFor": "girl",
-        "discountPct": 10,
-        "genreId": null,
-        "id": "68ad3607fc29be1873fc36aa"
+      "title": "Girl and the Moon Goddess",
+      "description": "Take your child on a whimsical journey filled with laughter, friendship, and discovery! Follow along as they explore the wonders of a sunny day with their trusty companion, Fluffy, from playing at home to enjoying a picnic by the sparkling lake. This adventure will fill their heart with joy and spark their imagination.",
+      "coverImage": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop",
+      "ageRange": {
+        "_id": "68ad3607fc29be1873fc36ab",
+        "minAge": 5,
+        "maxAge": 10
+      },
+      "idealFor": "girl",
+      "discountPct": 10,
+      "genreId": null,
+      "id": "68ad3607fc29be1873fc36aa"
     },
     {
-        "title": "Princess! We've been waiting for you ",
-        "description": "The adventure continues in Volume 2 of Princess and the Glowing Flower! Summoned by the Enchanted Forest itself, the Princess must prove her kind and brave heart to become the true Guardian of the Forest. A beautifully personalized tale of courage, kindness, and believing in your own magic.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=1bec286d24834d89bbaa1718d988dd95265ae2186694c0fdb2ee9f68602dd029&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36b7",
-            "minAge": 4,
-            "maxAge": 10
-        },
-        "idealFor": "girl",
-        "discountPct": 10,
-        "genreId": {
-            "name": "In the Enchanted Forest",
-            "id": "686f891f066850b7c44d1621"
-        },
-        "id": "68ad3607fc29be1873fc36b6"
+      "title": "Princess! We've been waiting for you",
+      "description": "The adventure continues in Volume 2 of Princess and the Glowing Flower! Summoned by the Enchanted Forest itself, the Princess must prove her kind and brave heart to become the true Guardian of the Forest. A beautifully personalized tale of courage, kindness, and believing in your own magic.",
+      "coverImage": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop",
+      "ageRange": {
+        "_id": "68ad3607fc29be1873fc36b7",
+        "minAge": 4,
+        "maxAge": 10
+      },
+      "idealFor": "girl",
+      "discountPct": 10,
+      "genreId": {
+        "name": "In the Enchanted Forest",
+        "id": "686f891f066850b7c44d1621"
+      },
+      "id": "68ad3607fc29be1873fc36b6"
     },
     {
-        "title": "Boy The Dinos Need You",
-        "description": "Imagine waking up to find a glowing dinosaur footprint that whisks your child away to Dino Valley, a magical place where talking dinosaurs need help after a mighty storm! This personalized adventure brings excitement, bravery, and friendship to life like never before.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=1bec286d24834d89bbaa1718d988dd95265ae2186694c0fdb2ee9f68602dd029&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36ba",
-            "minAge": 3,
-            "maxAge": 6
-        },
-        "idealFor": "boy",
-        "discountPct": 10,
-        "genreId": null,
-        "id": "68ad3607fc29be1873fc36b9"
+      "title": "Boy The Dinos Need You",
+      "description": "Imagine waking up to find a glowing dinosaur footprint that whisks your child away to Dino Valley, a magical place where talking dinosaurs need help after a mighty storm! This personalized adventure brings excitement, bravery, and friendship to life like never before.",
+      "coverImage": "https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=400&fit=crop",
+      "ageRange": {
+        "_id": "68ad3607fc29be1873fc36ba",
+        "minAge": 3,
+        "maxAge": 6
+      },
+      "idealFor": "boy",
+      "discountPct": 10,
+      "genreId": null,
+      "id": "68ad3607fc29be1873fc36b9"
     },
     {
-        "title": "The Amazing Adventures of {{{{childName}}}}",
-        "description": "A heartwarming story about a boy who loves ice cream but learns that kindness is even sweeter. When a lost kitten needs help, he bravely rescues her and discovers that small acts of compassion bring the biggest rewards. This personalized tale turns every page into a special moment of friendship, courage, and joy.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=1bec286d24834d89bbaa1718d988dd95265ae2186694c0fdb2ee9f68602dd029&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "minAge": 3,
-            "maxAge": 5
-        },
-        "idealFor": "boy",
-        "discountPct": 10,
-        "genreId": {
-            "name": "Animal Care",
-            "id": "686f891f066850b7c44d1624"
-        },
-        "id": "68ad3607fc29be1873fc36bf"
+      "title": "The Amazing Adventures of {{{{childName}}}}",
+      "description": "A heartwarming story about a boy who loves ice cream but learns that kindness is even sweeter. When a lost kitten needs help, he bravely rescues her and discovers that small acts of compassion bring the biggest rewards. This personalized tale turns every page into a special moment of friendship, courage, and joy.",
+      "coverImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+      "ageRange": {
+        "minAge": 3,
+        "maxAge": 5
+      },
+      "idealFor": "boy",
+      "discountPct": 10,
+      "genreId": {
+        "name": "Animal Care",
+        "id": "686f891f066850b7c44d1624"
+      },
+      "id": "68ad3607fc29be1873fc36bf"
     },
     {
-        "title": "Little Girl Explores Nature",
-        "description": "A little explorer is off on a wild adventure to visit nature’s most beautiful wonders. From sparking lakes and buzzing bees to sleeping creatures in the forest and sea, each page has something new to discover. It’s a journey full of laughter, wonders, and a whole lot of heart. Nature’s wonders are all around us, waiting to be found, one little adventure at a time.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=1bec286d24834d89bbaa1718d988dd95265ae2186694c0fdb2ee9f68602dd029&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36c3",
-            "minAge": 2,
-            "maxAge": 6
-        },
-        "idealFor": "girl",
-        "discountPct": 10,
-        "genreId": {
-            "name": "Educational",
-            "id": "686f891f066850b7c44d1614"
-        },
-        "id": "68ad3607fc29be1873fc36c2"
+      "title": "Little Girl Explores Nature",
+      "description": "A little explorer is off on a wild adventure to visit nature's most beautiful wonders. From sparking lakes and buzzing bees to sleeping creatures in the forest and sea, each page has something new to discover. It's a journey full of laughter, wonders, and a whole lot of heart. Nature's wonders are all around us, waiting to be found, one little adventure at a time.",
+      "coverImage": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=400&fit=crop",
+      "ageRange": {
+        "_id": "68ad3607fc29be1873fc36c3",
+        "minAge": 2,
+        "maxAge": 6
+      },
+      "idealFor": "girl",
+      "discountPct": 10,
+      "genreId": {
+        "name": "Educational",
+        "id": "686f891f066850b7c44d1614"
+      },
+      "id": "68ad3607fc29be1873fc36c2"
     },
     {
-        "title": "The Adventure of Boy and the Lost Star",
-        "description": "In this magical adventure, your child helps a lost star find its way back to the sky, learning valuable lessons about courage, kindness, and friendship along the way. This personalized story places your child at the heart of the adventure, making them the star of their very own journey.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36c6",
-            "minAge": 2,
-            "maxAge": 4
-        },
-        "idealFor": "boy",
-        "discountPct": 10,
-        "genreId": {
-            "name": "In Outer Space",
-            "id": "686f891f066850b7c44d161d"
-        },
-        "id": "68ad3607fc29be1873fc36c5"
+      "title": "The Adventure of Boy and the Lost Star",
+      "description": "In this magical adventure, your child helps a lost star find its way back to the sky, learning valuable lessons about courage, kindness, and friendship along the way. This personalized story places your child at the heart of the adventure, making them the star of their very own journey.",
+      "coverImage": "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=400&h=400&fit=crop",
+      "ageRange": {
+        "_id": "68ad3607fc29be1873fc36c6",
+        "minAge": 2,
+        "maxAge": 4
+      },
+      "idealFor": "boy",
+      "discountPct": 10,
+      "genreId": {
+        "name": "In Outer Space",
+        "id": "686f891f066850b7c44d161d"
+      },
+      "id": "68ad3607fc29be1873fc36c5"
     },
     {
-        "title": "Peekaboo, Baby Found You",
-        "description": "Where are my toes? My nose? My tummy? A joyful, rhyming journey discovering every wiggly, giggly part of their body! This sweet and simple personalized book is perfect for little ones learning about themselves through fun and playful words.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36c9",
-            "minAge": 1,
-            "maxAge": 2
-        },
-        "idealFor": "boy/girl",
-        "discountPct": 10,
-        "genreId": {
-            "name": "In the Old Castle",
-            "id": "686f891f066850b7c44d161f"
-        },
-        "id": "68ad3607fc29be1873fc36c8"
+      "title": "Peekaboo, Baby Found You",
+      "description": "Where are my toes? My nose? My tummy? A joyful, rhyming journey discovering every wiggly, giggly part of their body! This sweet and simple personalized book is perfect for little ones learning about themselves through fun and playful words.",
+      "coverImage": "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=400&fit=crop",
+      "ageRange": {
+        "_id": "68ad3607fc29be1873fc36c9",
+        "minAge": 1,
+        "maxAge": 2
+      },
+      "idealFor": "boy/girl",
+      "discountPct": 10,
+      "genreId": {
+        "name": "In the Old Castle",
+        "id": "686f891f066850b7c44d161f"
+      },
+      "id": "68ad3607fc29be1873fc36c8"
     },
     {
-        "title": "Girl’s Visit to Dr Dino",
-        "description": "Take your child on a fun, colorful adventure with Dr. Dino, the friendly dinosaur doctor! From exploring a jungle full of dinosaurs to learning about eating healthy, staying active, and getting good sleep, this story is full of excitement. Your child will love being the star of this happy, playful adventure!",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36cc",
-            "minAge": 2,
-            "maxAge": 4
-        },
-        "idealFor": "girl",
-        "discountPct": 10,
-        "genreId": {
-            "name": "Adventure",
-            "id": "686f891f066850b7c44d1613"
-        },
-        "id": "68ad3607fc29be1873fc36cb"
+      "title": "Girl's Visit to Dr Dino",
+      "description": "Take your child on a fun, colorful adventure with Dr. Dino, the friendly dinosaur doctor! From exploring a jungle full of dinosaurs to learning about eating healthy, staying active, and getting good sleep, this story is full of excitement. Your child will love being the star of this happy, playful adventure!",
+      "coverImage": "https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=400&h=400&fit=crop",
+      "ageRange": {
+        "_id": "68ad3607fc29be1873fc36cc",
+        "minAge": 2,
+        "maxAge": 4
+      },
+      "idealFor": "girl",
+      "discountPct": 10,
+      "genreId": {
+        "name": "Adventure",
+        "id": "686f891f066850b7c44d1613"
+      },
+      "id": "68ad3607fc29be1873fc36cb"
     },
     {
-        "title": "The ABC Journey with Boy ",
-        "description": "Join your child on a fun-filled adventure as they explore the alphabet! From apples to zebras, each letter comes to life with exciting items and playful activities. Watch as your child discovers a new favorite for every letter, making learning fun and personalized with their own name. This interactive ABC journey encourages a love for learning through vibrant illustrations and familiar objects.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36cf",
-            "minAge": 4,
-            "maxAge": 6
-        },
-        "idealFor": "boy",
-        "discountPct": 10,
-        "genreId": {
-            "name": "Educational",
-            "id": "686f891f066850b7c44d1614"
-        },
-        "id": "68ad3607fc29be1873fc36ce"
+      "title": "The ABC Journey with Boy",
+      "description": "Join your child on a fun-filled adventure as they explore the alphabet! From apples to zebras, each letter comes to life with exciting items and playful activities. Watch as your child discovers a new favorite for every letter, making learning fun and personalized with their own name. This interactive ABC journey encourages a love for learning through vibrant illustrations and familiar objects.",
+      "coverImage": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=400&fit=crop",
+      "ageRange": {
+        "_id": "68ad3607fc29be1873fc36cf",
+        "minAge": 4,
+        "maxAge": 6
+      },
+      "idealFor": "boy",
+      "discountPct": 10,
+      "genreId": {
+        "name": "Educational",
+        "id": "686f891f066850b7c44d1614"
+      },
+      "id": "68ad3607fc29be1873fc36ce"
     },
     {
-        "title": "Boy and the Moon Goddess",
-        "description": "Join your child on a magical journey to the moon! After discovering an ancient story about the Moon Goddess Selene, your child bravely builds a rocket and faces exciting challenges to unlock the greatest magic of all. Along the way, they solve riddles, meet moon creatures, and discover that with courage and dreams, anything is possible.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36d2",
-            "minAge": 5,
-            "maxAge": 10
-        },
-        "idealFor": "boy",
-        "discountPct": 10,
-        "genreId": {
-            "name": "Fantasy",
-            "id": "686f891f066850b7c44d1612"
-        },
-        "id": "68ad3607fc29be1873fc36d1"
+      "title": "Boy and the Moon Goddess",
+      "description": "Join your child on a magical journey to the moon! After discovering an ancient story about the Moon Goddess Selene, your child bravely builds a rocket and faces exciting challenges to unlock the greatest magic of all. Along the way, they solve riddles, meet moon creatures, and discover that with courage and dreams, anything is possible.",
+      "coverImage": "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=400&h=400&fit=crop",
+      "ageRange": {
+        "_id": "68ad3607fc29be1873fc36d2",
+        "minAge": 5,
+        "maxAge": 10
+      },
+      "idealFor": "boy",
+      "discountPct": 10,
+      "genreId": {
+        "name": "Fantasy",
+        "id": "686f891f066850b7c44d1612"
+      },
+      "id": "68ad3607fc29be1873fc36d1"
     },
     {
-        "title": "Girl's Fun in the Sun ",
-        "description": "A boring day turns into a fun afternoon when a little explorer decides to build the ultimate backyard obstacle course. With zigzag runs, superhero jumps, and splashy puddles, every challenge brightens the day a little bit more. This playful story celebrates creativity and the art of turning everyday things into something out of the ordinary.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=1bec286d24834d89bbaa1718d988dd95265ae2186694c0fdb2ee9f68602dd029&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36d5",
-            "minAge": 4,
-            "maxAge": 6
-        },
-        "idealFor": "girl",
-        "discountPct": 10,
-        "genreId": {
-            "name": "Educational",
-            "id": "686f891f066850b7c44d1614"
-        },
-        "id": "68ad3607fc29be1873fc36d4"
-    },
-    {
-        "title": "The Colors of Kid's Heart",
-        "description": "A magical, personalised story that helps your child explore emotions through colors! With the friendly Feelings Cloud, they’ll learn to understand and express feelings like happiness, sadness, and love in a fun and engaging way.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68c97ea47ca657cb1180c076/chapter/68c97ecd7ca657cb1180c07b/pageImageOptions/68c97ee07ca657cb1180c0be/generatedImage/68c97eea7ca657cb1180c0f1.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=1bec286d24834d89bbaa1718d988dd95265ae2186694c0fdb2ee9f68602dd029&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36d8",
-            "minAge": 2,
-            "maxAge": 4
-        },
-        "idealFor": "boy",
-        "discountPct": 10,
-        "genreId": {
-            "name": "Educational",
-            "id": "686f891f066850b7c44d1614"
-        },
-        "id": "68ad3607fc29be1873fc36d7"
-    },
-    {
-        "title": "Boy and the Wise Owl",
-        "description": "Join your child as they embark on a heartwarming adventure with the Wise Owl! Through the lessons of honesty, patience, and kindness, your child learns the values that make the world a better place. This story is full of magical moments and teaches your child how these important virtues shape their character.",
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "ageRange": {
-            "_id": "68ad3607fc29be1873fc36db",
-            "minAge": 5,
-            "maxAge": 10
-        },
-        "idealFor": "boy",
-        "discountPct": 10,
-        "genreId": {
-            "name": "Educational",
-            "id": "686f891f066850b7c44d1614"
-        },
-        "id": "68ad3607fc29be1873fc36da"
-    },
-    {
-        "title": "stor book latest",
-        "description": "stor book latest",
-        "idealFor": "boy",
-        "discountPct": 5,
-        "ageRange": {
-            "_id": "690495c2b2df626741f99790",
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "690495c2b2df626741f9978f"
-    },
-    {
-        "title": "stor book latest",
-        "description": "stor book latest",
-        "idealFor": "boy",
-        "discountPct": 5,
-        "ageRange": {
-            "_id": "69049600b2df626741f997a7",
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "69049600b2df626741f997a6"
-    },
-    {
-        "title": "stor book latest",
-        "description": "stor book latest",
-        "idealFor": "boy",
-        "discountPct": 5,
-        "ageRange": {
-            "_id": "69049743b2df626741f99966",
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "69049743b2df626741f99965"
-    },
-    {
-        "title": "stor book latest",
-        "description": "stor book latest",
-        "idealFor": "boy",
-        "discountPct": 5,
-        "ageRange": {
-            "_id": "6904991eb2df626741f999a4",
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "6904991eb2df626741f999a3"
-    },
-    {
-        "title": "stor book latest",
-        "description": "stor book latest",
-        "idealFor": "boy",
-        "discountPct": 5,
-        "ageRange": {
-            "_id": "69049935b2df626741f999c4",
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "69049935b2df626741f999c3"
-    },
-    {
-        "title": "jerry book ",
-        "description": "jerry book  create the ",
-        "idealFor": "boy",
-        "discountPct": 40,
-        "ageRange": {
-            "_id": "69049d0fb2df626741f99ac4",
-            "minAge": 5,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/688b107862676b34b1463736/personalizedBook/68cabf847525cdcf1b7a30fe/chapter/68cabfa97525cdcf1b7a3103/pageImageOptions/68cabfbd7525cdcf1b7a3147/generatedImage/68cabfc87525cdcf1b7a317b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=920911b0f4d051bc27a3457d7e6ebea5eda6291df9b853e90d811a5740807d4e&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "69049d0fb2df626741f99ac3"
-    },
-    {
-        "description": "This is a story about a young boy. He embarks on many adventures where he is kind and makes friends. Throughout his journey, he discovers the importance of helping others and the joy of making friends. The boy uses his ability to understand animals to help everyone.",
-        "ageRange": {
-            "minAge": 2,
-            "maxAge": 4
-        },
-        "idealFor": "boy",
-        "title": "The Amazing Adventures of {{{{childName}}}}",
-        "discountPct": 10,
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/69032a65d8105b382cb77736/coverImage/69032ba6d8105b382w3e1e.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=a9afaf99116a195796acacd410afb0a4739c70e8660a8a40d33848e5c95d7860&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "69032a65d8105b382cb77736"
-    },
-    {
-        "description": "This is a story about a young boy. He embarks on many adventures where he is kind and makes friends. Throughout his journey, he discovers the importance of helping others and the joy of making friends. The boy uses his ability to understand animals to help everyone.",
-        "ageRange": {
-            "minAge": 2,
-            "maxAge": 4
-        },
-        "idealFor": "boy",
-        "title": "Th Amazing Adventures of {{{{childName}}}}",
-        "discountPct": 10,
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/69032a65d8105b382cb77736/coverImage/69032ba6d8105b382w3e1e.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=a9afaf99116a195796acacd410afb0a4739c70e8660a8a40d33848e5c95d7860&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "690897842f9ea2535af1b33b"
-    },
-    {
-        "title": "Test Template",
-        "description": "Test Template",
-        "idealFor": "boy",
-        "discountPct": 5,
-        "ageRange": {
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "id": "69099b89563a4cd2e10286c6"
-    },
-    {
-        "title": "Test Template 1",
-        "description": "Test Template 1 description",
-        "idealFor": "boy",
-        "discountPct": 15,
-        "ageRange": {
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/69032a65d8105b382cb77736/coverImage/69032ba6d8105b382w3e1e.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=a9afaf99116a195796acacd410afb0a4739c70e8660a8a40d33848e5c95d7860&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "6909c78ae670a4793381e8b9"
-    },
-    {
-        "title": "template Test3",
-        "description": "template Test3 description",
-        "idealFor": "boy",
-        "discountPct": 18,
-        "ageRange": {
-            "minAge": 5,
-            "maxAge": 10
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/69032a65d8105b382cb77736/coverImage/69032ba6d8105b382w3e1e.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=a9afaf99116a195796acacd410afb0a4739c70e8660a8a40d33848e5c95d7860&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "6909cfcd07661a086534b45a"
-    },
-    {
-        "title": "Template Test 4",
-        "description": "Template Test 4 description",
-        "idealFor": "boy",
-        "discountPct": 10,
-        "ageRange": {
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/69032a65d8105b382cb77736/coverImage/69032ba6d8105b382w3e1e.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=a9afaf99116a195796acacd410afb0a4739c70e8660a8a40d33848e5c95d7860&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "6909d314e58e3f35626d4405"
-    },
-    {
-        "title": "Tester01",
-        "description": "Tester01 book ",
-        "idealFor": "boy",
-        "discountPct": 5,
-        "ageRange": {
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "id": "690b113f53a02c41966a15e1"
-    },
-    {
-        "title": "tester01 book ",
-        "description": "tester01 book ",
-        "idealFor": "boy",
-        "discountPct": 8,
-        "ageRange": {
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/69032a65d8105b382cb77736/coverImage/69032ba6d8105b382w3e1e.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=a9afaf99116a195796acacd410afb0a4739c70e8660a8a40d33848e5c95d7860&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "690b116d0fbf1d43011b8aca"
-    },
-    {
-        "title": "new Book create the user",
-        "description": "new Book create the user",
-        "idealFor": "girl",
-        "discountPct": 4,
-        "ageRange": {
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/69032a65d8105b382cb77736/coverImage/69032ba6d8105b382w3e1e.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=a9afaf99116a195796acacd410afb0a4739c70e8660a8a40d33848e5c95d7860&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "690b13090fbf1d43011b8d08"
-    },
-    {
-        "description": "This is a story about a young boy. He embarks on many adventures where he is kind and makes friends. Throughout his journey, he discovers the importance of helping others and the joy of making friends. The boy uses his ability to understand animals to help everyone.",
-        "ageRange": {
-            "minAge": 2,
-            "maxAge": 4
-        },
-        "idealFor": "boy",
-        "title": "The Amazing Adventures of {{{{childName}}}}",
-        "discountPct": 10,
-        "id": "690de7389b2e8c67afc32fd9"
-    },
-    {
-        "description": "This is a story about a young boy. He embarks on many adventures where he is kind and makes friends. Throughout his journey, he discovers the importance of helping others and the joy of making friends. The boy uses his ability to understand animals to help everyone.",
-        "ageRange": {
-            "minAge": 2,
-            "maxAge": 4
-        },
-        "idealFor": "boy",
-        "title": "The Amazing Adventures of {{{{childName}}}}",
-        "discountPct": 10,
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/691190aa77ad1d2935610659/coverImage/6911bcb58f816cca0c596f0b.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=04bf6a9264f222a818a47c9b69b9358bd8a4735afdeddeba49960420196a58a5&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "691190aa77ad1d2935610659"
-    },
-    {
-        "title": "create the books ",
-        "description": "create the books ",
-        "idealFor": "boy",
-        "discountPct": 2,
-        "ageRange": {
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/69032a65d8105b382cb77736/coverImage/69032ba6d8105b382w3e1e.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=a9afaf99116a195796acacd410afb0a4739c70e8660a8a40d33848e5c95d7860&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "6911c52aec3be50013cff2a8"
-    },
-    {
-        "title": "create the books ",
-        "description": "create the books ",
-        "idealFor": "boy",
-        "discountPct": 2,
-        "ageRange": {
-            "minAge": 1,
-            "maxAge": 5
-        },
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/69032a65d8105b382cb77736/coverImage/69032ba6d8105b382w3e1e.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=a9afaf99116a195796acacd410afb0a4739c70e8660a8a40d33848e5c95d7860&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "6911c543ec3be50013cff2d7"
-    },
-    {
-        "description": "This is a story about a young boy. He embarks on many adventures where he is kind and makes friends. Throughout his journey, he discovers the importance of helping others and the joy of making friends. The boy uses his ability to understand animals to help everyone.",
-        "ageRange": {
-            "minAge": 2,
-            "maxAge": 4
-        },
-        "idealFor": "boy",
-        "title": "The Amazing Adventures of {{{{childName}}}}",
-        "discountPct": 10,
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/691aff7c5bb2763504d65b88/coverImage/691b005e5bb2763504d65be4.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=4b5d74416b531a8f8bf8c4d2851dc2c543b8899d136bc93127633927f63743ca&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "691aff7c5bb2763504d65b88"
-    },
-    {
-        "description": "This is a story about a young boy. He embarks on many adventures where he is kind and makes friends. Throughout his journey, he discovers the importance of helping others and the joy of making friends. The boy uses his ability to understand animals to help everyone.",
-        "ageRange": {
-            "minAge": 2,
-            "maxAge": 4
-        },
-        "idealFor": "boy",
-        "title": "The Amazing Adventures of {{{{childName}}}}",
-        "discountPct": 10,
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/691dc1de3ff7157af21544a5/coverImage/691dc27c3ff7157af21544df.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=f9363b62eab7640f6c2ee2d3b2c5d9b66a2c1f01b84295d7a10b3639ec2a27e8&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "691dc1de3ff7157af21544a5"
-    },
-    {
-        "description": "This is a story about a young boy. He embarks on many adventures where he is kind and makes friends. Throughout his journey, he discovers the importance of helping others and the joy of making friends. The boy uses his ability to understand animals to help everyone.",
-        "ageRange": {
-            "minAge": 2,
-            "maxAge": 4
-        },
-        "idealFor": "boy",
-        "title": "The Amazing Adventures of {{{{childName}}}}",
-        "discountPct": 10,
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/691eb9d0c298798ba405c2dc/coverImage/691eecfe4618c9c557d555e8.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=f734edd68138b08c3c144b6697e418fe23e37edbe0c53b82a9b37c106baaff94&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "691eb9d0c298798ba405c2dc"
-    },
-    {
-        "description": "This is a story about a young boy. He embarks on many adventures where he is kind and makes friends. Throughout his journey, he discovers the importance of helping others and the joy of making friends. The boy uses his ability to understand animals to help everyone.",
-        "ageRange": {
-            "minAge": 1,
-            "maxAge": 2
-        },
-        "idealFor": "boy",
-        "title": "The Amazing Adventures of {{{{childName}}}}",
-        "discountPct": 10,
-        "coverImage": "https://storybook-storage-dev.s3.us-east-2.amazonaws.com/users/686e672c066850b7c44d14fb/bookTemplate/691efda40fe6d3576ff966ce/coverImage/691f104c559869e839c41ce9.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAVXZLW2T6VOBHGRX4%2F20251210%2Fus-east-2%2Fs3%2Faws4_request&X-Amz-Date=20251210T173756Z&X-Amz-Expires=3600&X-Amz-Signature=e87702bd6e127c0e2ac70733c47d5d1711e2519206bcd4d9f034cd206d7c8dac&X-Amz-SignedHeaders=host&x-id=GetObject",
-        "id": "691efda40fe6d3576ff966ce"
-    },
-    {
-        "description": "This is a story about a young boy. He embarks on many adventures where he is kind and makes friends. Throughout his journey, he discovers the importance of helping others and the joy of making friends. The boy uses his ability to understand animals to help everyone.",
-        "ageRange": {
-            "minAge": 1,
-            "maxAge": 2
-        },
-        "idealFor": "boy",
-        "title": "The Amazing Adventures of {{{{childName}}}}",
-        "discountPct": 10,
-        "id": "69242929e6f778c324c48c68"
+      "title": "Girl's Fun in the Sun",
+      "description": "A boring day turns into a fun afternoon when a little explorer decides to build the ultimate backyard obstacle course. With zigzag runs, superhero jumps, and splashy puddles, every challenge brightens the day a little bit more. This playful story celebrates creativity and the art of turning everyday things into something out of the ordinary.",
+      "coverImage": "https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=400&h=400&fit=crop",
+      "ageRange": {
+        "_id": "68ad3607fc29be1873fc36d5",
+        "minAge": 4,
+        "maxAge": 6
+      },
+      "idealFor": "girl",
+      "discountPct": 10,
+      "genreId": {
+        "name": "Educational",
+        "id": "686f891f066850b7c44d1614"
+      },
+      "id": "68ad3607fc29be1873fc36d4"
     }
-]
-  const loading = useSelector((state) => state?.bookTemplate?.isLoading);
-  const isNavbarOpen = useSelector(
-    (state) => state?.bookTemplate?.isNavbarOpen
-  );
+  ];
+  const [isNavbarOpen] = useState(false);
 
   const booksNew = (booksPaginatedData || [])?.slice(0, 4);
   const booksBestseller = (littleData || [])
@@ -840,6 +466,66 @@ const littleData =
           </div>
         </div>
 
+        <section className="h-auto md:!h-[590px] w-full">
+          <div className="h-0 w-full flex items-center mt-8">
+            {/* <div className="h-[56px] relative top-[0.05rem] flex w-full" style="background-image: url('https://resources.wonderwraps.com/f6726c80-77e8-49bb-80f6-3d17fe0a8124/img/home/blue-diamond.svg'); background-repeat: repeat-x;">
+             */}
+            <div
+              className="h-[56px] relative top-[0.05rem] flex w-full"
+              style={{
+                backgroundImage:
+                  "url('https://resources.wonderwraps.com/f6726c80-77e8-49bb-80f6-3d17fe0a8124/img/home/blue-diamond.svg')",
+                backgroundRepeat: "repeat-x",
+              }}
+            ></div>
+          </div>
+
+          {/* <div className="w-full h-full flex flex-col" style="background: linear-gradient(129.35deg, #4CC7F4 27.47%, #0038BA 182.17%);"> */}
+          <div
+            className="w-full h-full flex flex-col"
+            style={{
+              background:
+                "linear-gradient(129.35deg, #4CC7F4 27.47%, #0038BA 182.17%)",
+            }}
+          >
+            <div className="h-0 w-full hidden justify-end pr-4 md:flex">
+              <img
+                src="https://resources.wonderwraps.com/f6726c80-77e8-49bb-80f6-3d17fe0a8124/img/home/adored-img.png"
+                alt="image"
+                className="h-[590px] object-cover"
+                  loading="lazy"
+              />
+            </div>
+            <div className="w-full h-full flex bg-cover md:bg-contain bg-no-repeat bg-res">
+              <div className="w-full flex flex-col justify-center pb-0 md:pb-12 px-8 py-16 md:pl-24 lg:pl-32 gap-[30px]">
+                <div className="flex flex-col text-white gap-3 md:gap-6">
+                  <h1 className="text-[38px] leading-10 md:text-[50px] md:leading-[50px] font-marcellus">
+                    Adored by millions worldwide
+                  </h1>
+                  <h3 className="text-[22px] leading-8 font-medium font-sans">
+                    From magical adventures for little dreamers to
+                    <br /> heartwarming reads for Mum, Dad, and even Grandma,
+                    there’s a little something for everyone.
+                  </h3>
+                </div>
+
+                <div
+                  onClick={() => {
+                    navigate("/template-selection");
+                  }}
+                  className="bg-white hover:bg-white/90 w-fit text-[#62C4EC] opacity-100 font-bold py-[14px] px-[26px] text-sm rounded-[4px] cursor-pointer "
+                >
+                  View All Books
+                </div>
+              </div>
+              <div className="w-full hidden md:flex"></div>
+            </div>
+            <div className="flex md:hidden">
+              <img src={adoredHome} alt="image" className="object-contain"  loading="lazy" />
+            </div>
+          </div>
+        </section>
+
         {/* Perfect for Girls Section */}
         <div className="max-w-6xl mx-auto px-6 py-12">
           <div className="text-center mb-12">
@@ -881,6 +567,10 @@ const littleData =
               Explore More
             </Button>
           </div>
+        </div>
+
+        <div className="lg:mt-[80px] mt-[40px]">
+          <CharacterView />
         </div>
         <div
           className="w-full h-full flex flex-col md:flex-row bg-cover bg-no-repeat mt-12"
