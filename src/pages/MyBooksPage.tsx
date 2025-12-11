@@ -347,7 +347,7 @@ const MyBooksPage = () => {
       ],
     };
   };
-
+  console.log("checking update");
   const totalPages = 1;
   const hasNextPage = false;
   const hasPrevPage = false;
@@ -364,6 +364,7 @@ const MyBooksPage = () => {
       <div className="sticky top-0  z-40">
         <Navbar />
       </div>
+
       <div>
         <div className="absolute inset-0 -top-28 w-full a">
           <img
