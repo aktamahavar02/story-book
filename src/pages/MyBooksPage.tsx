@@ -363,9 +363,9 @@ const MyBooksPage = () => {
       {/* <div className="absolute inset-10 bg-[url('https://resources.wonderwraps.com/50f3c74c-975b-48a7-b5b0-2983f258eee8/img/fillers.png')] bg-no-repeat filter blur-sm opacity-50"></div> */}
       <div className="sticky top-0  z-40">
         <Navbar />
-      </div>{" "}
+      </div>
       <div>
-        <div className="absolute inset-0 -top-28 w-full">
+        <div className="absolute inset-0 -top-28 w-full a">
           <img
             src="	https://resources.wonderwraps.com/a10db3cd-8d51-4c1e-9442-3b46e70493a5/img/fillers.png"
             className="hidden md:block w-full opacity-50"
