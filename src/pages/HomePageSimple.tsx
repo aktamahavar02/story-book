@@ -125,7 +125,7 @@ const HomePage = () => {
 
   const littleData = [
     {
-      "title": "ABCD Journey With Girl",
+      "title": "ABC's Journey With Girl",
       "description": "Join your child on a fun-filled adventure as they explore the alphabet! From apples to zebras, each letter comes to life with exciting items and playful activities. Watch as your child discovers a new favorite for every letter, making learning fun and personalized with their own name. This interactive ABC journey encourages a love for learning through vibrant illustrations and familiar objects.",
       "coverImage": "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=400&fit=crop",
       "ageRange": {
