@@ -13,10 +13,10 @@ export const staticBooks = [
     price: 29.99
   },
   {
-    id: "2", 
+    id: "2",
     title: "Girl and the Moon Goddess",
     description: "Take your child on a whimsical journey filled with laughter...",
-    coverImage: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop",
+    coverImage: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=400&fit=crop",
     ageRange: { minAge: 5, maxAge: 10 },
     idealFor: "girl",
     discountPct: 10,

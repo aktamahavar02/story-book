@@ -24,7 +24,7 @@ import CharacterView from "@/components/ui/CharacterView.js";
 const HomePage = () => {
   const navigate = useNavigate();
   const [loading] = useState(false);
-  
+
   // const booksPaginatedData = useSelector(
   //   (state) => state?.bookTemplate?.bookTemplateData?.results
   // );
@@ -44,7 +44,7 @@ const HomePage = () => {
     {
       "title": "Girl and the Moon Goddess",
       "description": "Take your child on a whimsical journey filled with laughter...",
-      "coverImage": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop",
+      "coverImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
       "ageRange": { "_id": "68ad3607fc29be1873fc36ab", "minAge": 5, "maxAge": 10 },
       "idealFor": "girl",
       "discountPct": 10,
@@ -108,11 +108,11 @@ const HomePage = () => {
       "id": "68ad3607fc29be1873fc36c8"
     }
   ];
-  
 
 
-  
-  
+
+
+
   const handleGetStarted = () => {
     navigate("/template-selection");
   };
@@ -144,7 +144,7 @@ const HomePage = () => {
     {
       "title": "Girl and the Moon Goddess",
       "description": "Take your child on a whimsical journey filled with laughter, friendship, and discovery! Follow along as they explore the wonders of a sunny day with their trusty companion, Fluffy, from playing at home to enjoying a picnic by the sparkling lake. This adventure will fill their heart with joy and spark their imagination.",
-      "coverImage": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop",
+      "coverImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
       "ageRange": {
         "_id": "68ad3607fc29be1873fc36ab",
         "minAge": 5,
@@ -345,7 +345,7 @@ const HomePage = () => {
       <div className="sticky top-0 z-40">
         <Navbar />
       </div>
-      
+
       <div className={`${isNavbarOpen ? "blur-sm" : ""}`}>
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-blue-100 via-teal-50 to-cyan-100 py-20">
@@ -411,7 +411,7 @@ const HomePage = () => {
               ))}
             </div>
           )}
-          
+
           <div className="text-center mt-12">
             <Button
               onClick={() => navigate("/template-selection")}
@@ -432,7 +432,7 @@ const HomePage = () => {
                 Most loved stories by families worldwide
               </p>
             </div>
-            
+
             {loading ? (
               <div className="flex items-center justify-center py-20">
                 <img src={loadingImage} alt="Loading" className="w-16 h-16" loading="lazy" />
@@ -453,7 +453,7 @@ const HomePage = () => {
                 ))}
               </div>
             )}
-            
+
             <div className="text-center mt-12">
               <Button
                 onClick={() => navigate("/template-selection")}
@@ -493,7 +493,7 @@ const HomePage = () => {
                 src="https://resources.wonderwraps.com/f6726c80-77e8-49bb-80f6-3d17fe0a8124/img/home/adored-img.png"
                 alt="image"
                 className="h-[590px] object-cover"
-                  loading="lazy"
+                loading="lazy"
               />
             </div>
             <div className="w-full h-full flex bg-cover md:bg-contain bg-no-repeat bg-res">
@@ -521,7 +521,7 @@ const HomePage = () => {
               <div className="w-full hidden md:flex"></div>
             </div>
             <div className="flex md:hidden">
-              <img src={adoredHome} alt="image" className="object-contain"  loading="lazy" />
+              <img src={adoredHome} alt="image" className="object-contain" loading="lazy" />
             </div>
           </div>
         </section>
@@ -557,7 +557,7 @@ const HomePage = () => {
               ))}
             </div>
           )}
-          
+
           <div className="text-center mt-12">
             <Button
               onClick={() => navigate("/template-selection")}
@@ -604,7 +604,7 @@ const HomePage = () => {
                 <img
                   src={firefighter}
                   alt="image"
-                  loading="lazy" 
+                  loading="lazy"
                   className="rounded-full shrink-0 aspect-square h-fit w-[97.56px] md:w-[122px]"
                 />
                 <div className="h-0 w-full flex justify-center">
@@ -616,7 +616,7 @@ const HomePage = () => {
                   <img
                     src={arrowGreen1}
                     alt="image"
-                    loading="lazy" 
+                    loading="lazy"
                     className="w-14 h-14 sm:w-24 sm:h-24 relative left-24 bottom-5 sm:bottom-14 sm:left-32"
                   />
                 </div>
@@ -626,14 +626,14 @@ const HomePage = () => {
                   <img
                     src={arrowGreen2}
                     alt="image"
-                    loading="lazy" 
+                    loading="lazy"
                     className="w-12 h-12 sm:w-16 sm:h-16 relative top-20 right-12 sm:right-20"
                   />
                 </div>
                 <img
                   src={police}
                   alt="image"
-                  loading="lazy" 
+                  loading="lazy"
                   className="rounded-full shrink-0 aspect-square h-fit w-[97.56px] md:w-[146px]"
                 />
                 <div className="h-0 w-full flex justify-center">
@@ -647,7 +647,7 @@ const HomePage = () => {
               <img
                 src={child}
                 alt="image"
-                loading="lazy" 
+                loading="lazy"
                 className="rounded-full shrink-0 aspect-square h-fit w-[120px] relative top-4 md:top-0"
               />
             </div>
@@ -657,14 +657,14 @@ const HomePage = () => {
                   <img
                     src={arrowGreen4}
                     alt="image"
-                    loading="lazy" 
+                    loading="lazy"
                     className="w-12 h-12 sm:w-16 sm:h-16 relative left-20 bottom-6 sm:bottom-12 sm:left-28"
                   />
                 </div>
                 <img
                   src={pilot}
                   alt="image"
-                  loading="lazy" 
+                  loading="lazy"
                   className="rounded-full shrink-0 aspect-square h-fit w-[97.56px] md:w-[134px]"
                 />
                 <div className="h-0 w-full flex justify-center">
@@ -678,14 +678,14 @@ const HomePage = () => {
                   <img
                     src={arrowGreen3}
                     alt="image"
-                    loading="lazy" 
+                    loading="lazy"
                     className="w-9 h-9 sm:w-12 sm:h-12 relative bottom-6 right-6 sm:bottom-8 sm:right-8"
                   />
                 </div>
                 <img
                   src={doctor}
                   alt="image"
-                  loading="lazy" 
+                  loading="lazy"
                   className="rounded-full shrink-0 aspect-square h-fit w-[97.56px] md:w-[142px]"
                 />
                 <div className="h-0 w-full flex justify-center">
@@ -710,8 +710,8 @@ const HomePage = () => {
                 Use our AI-powered story builder to create a unique adventure tailored for your child
               </p>
             </div>
-            
-            
+
+
             <div className="grid md:grid-cols-3 gap-8 mb-12">
               <div className="bg-white rounded-2xl p-8 transform hover:scale-105 transition-transform shadow-lg">
                 <Sparkles className="w-12 h-12 mx-auto mb-4 text-blue-500" />
@@ -741,7 +741,7 @@ const HomePage = () => {
                 </p>
               </div>
             </div>
-            
+
             <Button
               onClick={handleCreateFromScratch}
               className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg rounded-full transform hover:scale-105 transition-all font-figTree"

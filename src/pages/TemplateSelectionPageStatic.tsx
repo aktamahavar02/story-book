@@ -40,7 +40,7 @@ const littleData = [
   {
     "title": "Girl and the Moon Goddess",
     "description": "Take your child on a whimsical journey filled with laughter, friendship, and discovery! Follow along as they explore the wonders of a sunny day with their trusty companion, Fluffy, from playing at home to enjoying a picnic by the sparkling lake. This adventure will fill their heart with joy and spark their imagination.",
-    "coverImage": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop",
+    "coverImage": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
     "ageRange": {
       "_id": "68ad3607fc29be1873fc36ab",
       "minAge": 5,
@@ -472,8 +472,8 @@ const TemplateSelectionPageStatic = () => {
                       }}
                       disabled={!hasPrevPage}
                       className={`px-3 py-1 rounded border text-sm ${!hasPrevPage
-                          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                          : "bg-white text-gray-700 hover:bg-gray-50"
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-white text-gray-700 hover:bg-gray-50"
                         }`}
                     >
                       Previous
@@ -487,8 +487,8 @@ const TemplateSelectionPageStatic = () => {
                           window.scrollTo({ top: 0, behavior: "smooth" });
                         }}
                         className={`px-3 py-1 rounded border text-sm ${currentPage === page
-                            ? "bg-purple-500 text-white"
-                            : "bg-white text-gray-700 hover:bg-gray-50"
+                          ? "bg-purple-500 text-white"
+                          : "bg-white text-gray-700 hover:bg-gray-50"
                           }`}
                       >
                         {page}
@@ -502,8 +502,8 @@ const TemplateSelectionPageStatic = () => {
                       }}
                       disabled={!hasNextPage}
                       className={`px-3 py-1 rounded border text-sm ${!hasNextPage
-                          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                          : "bg-white text-gray-700 hover:bg-gray-50"
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-white text-gray-700 hover:bg-gray-50"
                         }`}
                     >
                       Next

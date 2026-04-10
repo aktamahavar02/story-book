@@ -145,8 +145,8 @@ const SupportPage = () => {
         <Navbar />
       </div>{" "}
       <div className={` ${isNavbarOpen ? "blur-sm" : ""}  `}>
-        <div className=" relative">
-          <div className="absolute inset-0 left-0 right-0 -top-28 w-full">
+        <div className="relative isolate">
+          <div className="absolute inset-0 left-0 right-0 -top-28 w-full z-0 pointer-events-none">
             <img
               src="https://resources.wonderwraps.com/a10db3cd-8d51-4c1e-9442-3b46e70493a5/img/fillers.png"
               className="hidden md:block w-full opacity-50"
@@ -156,20 +156,20 @@ const SupportPage = () => {
               className="block md:hidden w-full h-auto opacity-50 object-cover"
             />
           </div>
-          <div className="max-w-7xl mx-auto mt-6 sm:mt-4 p-4 sm:p-8 ">
+          <div className="relative z-10 max-w-7xl mx-auto mt-6 sm:mt-4 p-4 sm:p-8 ">
             <h1 className="text-3xl font-marcellus text-[#000] text-center  mb-8">
               Support
             </h1>
             <div className="flex flex-col-reverse gap-8 md:flex-row rounded-lg p-4 z-40 bg-white">
-              <div className=" flex flex-col-reverse gap-8 md:flex-row md:items-end w-full pt-5 relative rounded-lg border border-gray-200 z-40 bg-white">
-                <div className="w-full md:w-1/2 z-40 bg-white mt-6">
+              <div className=" flex flex-col-reverse gap-8 md:flex-row md:items-end w-full pt-5 relative rounded-lg border border-gray-200 z-50 bg-white">
+                <div className="w-full md:w-1/2 bg-white mt-6">
                   <img
                     src="https://resources.wonderwraps.com/f6726c80-77e8-49bb-80f6-3d17fe0a8124/img/support_image.png"
                     alt="Support Graphic"
                     className="rounded-lg object-contain w-full max-h-[235px] md:max-h-[377px]"
                   />
                 </div>
-                <div className="w-full md:w-1/2 py-2 px-4 flex flex-col justify-center z-50 bg-white">
+                <div className="w-full md:w-1/2 py-2 px-4 flex flex-col justify-center  bg-white">
                   <h2 className=" text-3xl font-marcellus text-black mb-2 sm:mb-4 text-left md:text-left">
                     <span className="">How can we help</span>?
                   </h2>
